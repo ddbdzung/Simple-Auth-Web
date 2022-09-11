@@ -92,30 +92,6 @@ After creating the production build, run:
 
 - `npm run serve` or `pnpm run serve` or `yarn run serve` and open the browser at `http://localhost:4173`
 
-## Connect With Me
-
-<!-- 👤 **Fabricio** -->
-
-| &nbsp;       | &nbsp;                                               |
-| ------------ | ---------------------------------------------------- |
-| **GitHub**   | [@fabgrel10](https://github.com/fabgrel10)           |
-| **Twitter**  | [@fabgrel10](https://twitter.com/fabgrel10)          |
-| **LinkedIn** | [@fabgrel10](https://www.linkedin.com/in/fabgrel10/) |
-
-## Show your support
-
-You can give a ⭐️ if you like this project!
-
-## Acknowledgments
-
-The ideas and inspiration from this project are coming from the following:
-
-- [ESLint docs](https://eslint.org/docs/user-guide/configuring/)
-- [Prettier docs](https://prettier.io/docs/en/index.html)
-- [Stylelint docs](https://stylelint.io/user-guide/configure/)
-- [starter-vite-react](https://github.com/warugaki-web-developer/starter-vite-react)
-- [Vitamin](https://github.com/wtchnm/Vitamin)
-
 ## License
 
-No License. You can use this starter as you wish.
+No license. Original version: [Github](https://github.com/fabgrel10)
