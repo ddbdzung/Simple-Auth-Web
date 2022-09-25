@@ -5,7 +5,7 @@ import Counter from './features/counter/Counter';
 
 function App() {
   return (
-    <div className="text-center">
+    <div className="text-center bg-slate-300">
       <header className="min-h-screen flex flex-col items-center justify-center text-template">
         <img src={logo} id="App-logo" className="h-40vh pointer-events-none" alt="logo" />
         <Counter />
