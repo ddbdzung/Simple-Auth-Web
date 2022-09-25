@@ -4,6 +4,7 @@
 ![Babel](https://img.shields.io/badge/Babel-F9DC3e?style=for-the-badge&logo=babel&logoColor=black)
 ![React](https://img.shields.io/badge/-React-61DAFB?logo=react&logoColor=white&style=for-the-badge)
 ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+![Redux](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)
 ![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)
 ![Prettier](https://img.shields.io/badge/-Prettier-F7B93E?logo=prettier&logoColor=white&style=for-the-badge)
 ![Stylelint](https://img.shields.io/badge/-Stylelint-263238?logo=stylelint&logoColor=white&style=for-the-badge)
@@ -22,7 +23,8 @@ For styling it comes with SASS, Emotion, and TailwindCSS ready to use. Choose yo
 
 - [Vite](https://vitejs.dev/) Next generation frontend tooling.
 - [Babel](https://babeljs.io/) The compiler for next generation JavaScript.
-- [React Router](https://reactrouter.com/) Declarative Routing for React.js
+- [React Router](https://reactrouter.com/) Declarative Routing for React.js.
+- [Redux Toolkit](https://redux-toolkit.js.org/) Batteries-included toolset for Redux development.
 - [ESLint](https://eslint.org/) Find and fix problems in your JavaScript code.
 - [Prettier](https://prettier.io/) Opinionated code formatter.
 - [Stylelint](https://stylelint.io/) A mighty, modern linter that helps you avoid errors and enforce conventions in your styles.
@@ -31,7 +33,7 @@ For styling it comes with SASS, Emotion, and TailwindCSS ready to use. Choose yo
 - [Sass](https://sass-lang.com/) Syntactically Awesome Style Sheets.
 - [TailwindCSS](https://tailwindcss.com/) Rapidly build modern websites without ever leaving your HTML.
 - [Jest](https://jestjs.io/) Delightful JavaScript Testing.
-- [Testing Library](https://testing-library.com/) The React Testing Library is a very light-weight solution for testing React components
+- [Testing Library](https://testing-library.com/) The React Testing Library is a very light-weight solution for testing React components.
 
 ### Other Plugins
 
