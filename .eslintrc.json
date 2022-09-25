@@ -34,7 +34,6 @@
         "src/**/*.{js,jsx}"
       ],
       "rules": {
-        "react/prop-types": "off",
         "import/order": [
           "error",
           {
@@ -72,6 +71,7 @@
     }
   ],
   "rules": {
+    "no-use-before-define": "off",
     "jsx-a11y/click-events-have-key-events": "warn",
     "jsx-a11y/label-has-associated-control": "warn",
     "jsx-a11y/no-noninteractive-element-interactions": "warn",
