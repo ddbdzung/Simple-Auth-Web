@@ -12,10 +12,6 @@
 ![Jest](https://img.shields.io/badge/-Jest-C21325?logo=jest&logoColor=white&style=for-the-badge)
 ![Testing Library](https://img.shields.io/badge/-Testing%20Library-E33332?logo=testing%20library&logoColor=white&style=for-the-badge)
 
-> Opinionated Vite starter template.
-
-![screenshot](./src/assets/images/app_screenshot.gif)
-
 ## Description
 
 An starter template for Vite React 18 projects including a bunch of useful tools and libraries enforcing best practices and autofix on save.
