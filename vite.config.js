@@ -10,6 +10,9 @@ export default defineConfig({
       babel: {
         plugins: ['@emotion/babel-plugin']
       }
-    })
-  ]
+    }),
+  ],
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' }
+  }
 });
