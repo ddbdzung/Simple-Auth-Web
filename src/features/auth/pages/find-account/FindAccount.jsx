@@ -3,13 +3,15 @@ import { Formik, Form } from 'formik'
 import throttle from 'lodash.throttle'
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
+import { useNavigate } from 'react-router-dom'
 
 
 import TextInput from '../../../../shared/custom/TextInput'
 import { Link } from 'react-router-dom'
 import {
   clearMessage,
-  signInAsync,
+  findAccountAsync,
+  clearStatusCode,
 } from '../../authSlice'
 import { ERROR } from '../../../../constants'
 import { useState, useEffect } from 'react'
@@ -19,31 +21,41 @@ import Alert from '../../../../shared/Alert'
  * Submit form with throttle wait 3s
  */
 const throttleWrapper = throttle(async (values, actions, dispatch) => {
-  const { email, password } = values
-  const payload = {
-    email,
-    password
-  }
-  dispatch(signInAsync(payload))
+  const { email } = values
+  dispatch(findAccountAsync({ email }))
 }, 3000, { trailing: false })
 
-export default function SignIn() {
+export default function FindAccount() {
   const dispatch = useDispatch()
-  const { formStatus, message } = useSelector(store => store.auth)
+  const navigate = useNavigate()
+  const { formStatus, message, statusCode } = useSelector(store => store.auth)
   const [errorMessage, setErrorMessage] = useState(message)
+
   useEffect(() => {
     if (message) {
-      setErrorMessage(prev => {
-        return message
-      })
+      setErrorMessage(message)
     }
 
     return () => {
       if (message) {
         dispatch(clearMessage())
       }
+      if (errorMessage) {
+        setTimeout(() => setErrorMessage(''), 3000)
+      }
     }
   })
+
+  useEffect(() => {
+    if (statusCode) {
+      if (statusCode === 200) {
+        navigate('/auth/recovery')
+      }
+      dispatch(clearStatusCode())
+    }
+
+  }, [statusCode])
+
   return (
     <>
       {errorMessage && (
@@ -54,13 +66,10 @@ export default function SignIn() {
       <Formik
         initialValues={{
           email: '',
-          password: ''
         }}
         validationSchema={Yup.object({
           email: Yup.string()
             .required('Required'),
-          password: Yup.string()
-            .required('Required')
         })
         }
         onSubmit={(values, actions) => {
@@ -69,24 +78,17 @@ export default function SignIn() {
       >
         <Form className="bg-white rounded-md shadow-2xl p-5">
           <h1 className="text-gray-800 font-bold text-2xl mb-1">Simple App</h1>
-          <p className="text-sm font-normal text-gray-600 mb-8 uppercase">Sign In</p>
+          <p className="text-sm font-normal text-gray-600 mb-8 uppercase">Find your account</p>
           <div className="flex items-center border-2 mb-8 py-2 px-3 rounded-2xl">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
             </svg>
-            <TextInput id="email" type="email" name="email" placeholder="Email Address" />
-          </div>
-          <div className="flex items-center border-2 mb-12 py-2 px-3 rounded-2xl ">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-            </svg>
-            <TextInput type="password" name="password" id="password" placeholder="Password" />
-
+            <TextInput id="email" type="email" name="email" placeholder="Email address" />
           </div>
           {formStatus && formStatus === 'ready'
             ?
             <button type="submit" className="block w-full bg-indigo-600 mt-5 py-2 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2">
-              Sign In
+              Search
             </button>
             :
             <button disabled type="submit" className="block w-full bg-indigo-600 mt-5 py-2 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2">
@@ -97,11 +99,8 @@ export default function SignIn() {
               </svg>
             </button>
           }
-          <div className="flex justify-between mt-4">
-            <Link to="/auth/identify" className="text-sm ml-2 hover:text-blue-500 cursor-pointer hover:-translate-y-1 duration-500 transition-all">Forgot Password ?</Link>
-            <span ></span>
-
-            <Link to="/auth/sign-up" className="text-sm ml-2 hover:text-blue-500 cursor-pointer hover:-translate-y-1 duration-500 transition-all">Don't have an account yet?</Link>
+          <div className="flex justify-end mt-4">
+            <Link to="/auth/sign-in" className="text-sm ml-2 hover:text-blue-500 cursor-pointer hover:-translate-y-1 duration-500 transition-all">Have an account?</Link>
           </div>
         </Form>
       </Formik>

@@ -39,11 +39,3 @@ const Alert = ({ type, title, contents, id }) => {
 };
 
 export default Alert
-
-// export default function ClosingAlert() {
-//   return (
-//     <>
-//       return <Alert color="pink" />;
-//     </>
-//   );
-// }

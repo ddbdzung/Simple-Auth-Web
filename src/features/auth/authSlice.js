@@ -2,16 +2,18 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { customAxios } from '../../helpers/customAxios'
 
 import { loadState, saveState } from '../../helpers/handleState'
-import { fetchSignIn, fetchSignUp } from './authAPI'
+import { fetchSignIn, fetchSignUp, fetchFindAccount, fetchResetPwEmail } from './authAPI'
 
 const initialState = {
   formStatus: 'ready',
+  statusCode: '',
   message: '',
 
   access: loadState('access')?.access || '',
   refresh: loadState('refresh')?.refresh || '',
+  resetPw: '',
 
-  username: loadState('username')?.username || '',
+  username: loadState('username')?.username || 'Simple Shop',
   userStatus: '',
   id: '',
   role: '',
@@ -67,6 +69,55 @@ export const signInAsync = createAsyncThunk(
     }
   }
 )
+export const findAccountAsync = createAsyncThunk(
+  'auth/fetchFindAccount',
+  async (payload, { getState }) => {
+    const { access, refresh } = getState().auth
+    try {
+      const response = await fetchFindAccount({
+        access,
+        refresh,
+      }, payload)
+
+      return response.data
+    } catch (errorResponse) {
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return {
+          code: errorResponse.code,
+          message: errorResponse.message,
+        }
+      }
+
+      const { data } = errorResponse.response
+      return data
+    }
+  }
+)
+
+export const resetpwEmailAsync = createAsyncThunk(
+  'auth/fetchResetPwEmail',
+  async (payload, { getState }) => {
+    const { access, refresh } = getState().auth
+    try {
+      const response = await fetchResetPwEmail({
+        access,
+        refresh,
+      }, payload)
+
+      return response.data
+    } catch (errorResponse) {
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return {
+          code: errorResponse.code,
+          message: errorResponse.message,
+        }
+      }
+
+      const { data } = errorResponse.response
+      return data
+    }
+  }
+)
 
 export const testAsync = createAsyncThunk(
   'auth/fetchTest',
@@ -94,12 +145,13 @@ export const testAsync = createAsyncThunk(
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
+
   reducers: {
     logOut: state => {
       state.id = ''
       state.slug = ''
       state.userStatus = ''
-      state.username = ''
+      state.username = 'simple shop'
       state.role = ''
       state.access = ''
       state.refresh = ''
@@ -110,8 +162,12 @@ export const authSlice = createSlice({
     },
     clearMessage: state => {
       state.message = ''
-    }
+    },
+    clearStatusCode: state => {
+      state.statusCode = ''
+    },
   },
+
   extraReducers: builder => {
     builder
       // handle signUpAsync cases
@@ -132,12 +188,10 @@ export const authSlice = createSlice({
 
         const { code, message } = action.payload
         if (code === 400 || code === 401) {
-          // Handle error 400
           state.formStatus = 'ready'
           state.message = message
           return
         } else if (code === 500) {
-          // Handle internal server error
           state.formStatus = 'ready'
           state.message = message
           return
@@ -175,12 +229,10 @@ export const authSlice = createSlice({
 
         const { code, message } = action.payload
         if (code === 400 || code === 401) {
-          // Handle error 400
           state.formStatus = 'ready'
           state.message = message
           return
         } else if (code === 500) {
-          // Handle internal server error
           state.formStatus = 'ready'
           state.message = message
           return
@@ -221,11 +273,9 @@ export const authSlice = createSlice({
 
         const { code, message } = action.payload
         if (code === 400 || code === 401) {
-          // Handle error 400
           state.message = message
           return
         } else if (code === 500) {
-          // Handle internal server error
           state.message = message
           return
 
@@ -235,9 +285,80 @@ export const authSlice = createSlice({
         }
 
       })
+
+      .addCase(findAccountAsync.pending, state => {
+        state.formStatus = 'loading'
+      })
+      .addCase(findAccountAsync.rejected, state => {
+        state.formStatus = 'ready'
+      })
+      .addCase(findAccountAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+          return
+        }
+
+        const { code, message } = action.payload
+        if (code === 400 || code === 401) {
+          state.formStatus = 'ready'
+          state.message = 'Your search did not return any results. Please try again with other information.'
+
+          return
+        } else if (code === 500) {
+          state.formStatus = 'ready'
+          state.message = message
+
+          return
+        } else if (code === 200) {
+          state.formStatus = 'ready'
+          state.statusCode = code
+
+          if (action.payload?.data?.token) {
+            state.resetPw = action.payload?.data?.token
+          }
+
+          return
+        }
+      })
+
+      .addCase(resetpwEmailAsync.pending, state => {
+        state.formStatus = 'loading'
+      })
+      .addCase(resetpwEmailAsync.rejected, state => {
+        state.formStatus = 'ready'
+      })
+      .addCase(resetpwEmailAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+          return
+        }
+
+        const { code, message } = action.payload
+        if (code === 400) {
+          state.formStatus = 'ready'
+          state.message = 'Something wrong! Please try again!'
+
+          return
+        } else if (code === 401) {
+          state.formStatus = 'ready'
+          state.message = message
+
+          return
+        } else if (code === 500) {
+          state.formStatus = 'ready'
+          state.message = message
+
+          return
+        } else if (code === 200) {
+          state.formStatus = 'ready'
+          state.statusCode = code
+
+          return
+        }
+      })
   }
 })
 
-export const { logOut, clearMessage } = authSlice.actions
+export const { logOut, clearMessage, clearStatusCode } = authSlice.actions
 
 export default authSlice.reducer
