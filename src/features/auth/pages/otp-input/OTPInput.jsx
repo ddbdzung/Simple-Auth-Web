@@ -3,18 +3,18 @@ import { Formik, Form } from 'formik'
 import throttle from 'lodash.throttle'
 import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
-
-import { Link } from 'react-router-dom'
 import {
   clearMessage,
-  cancelResetPassword,
   checkResetPwCodeAsync,
+  clearStatusCode,
 } from '../../authSlice'
 import Alert from '../../../../shared/Alert'
 import TextInput from '../../../../shared/custom/TextInput'
 import { ERROR } from '../../../../constants'
-import { useEffect, useState } from 'react'
+
 
 /**
  * Submit form with throttle wait 3s
@@ -24,11 +24,12 @@ const throttleWrapper = throttle(async (values, actions, dispatch, clientPw) => 
   const token = clientPw
 
   dispatch(checkResetPwCodeAsync({ secureCode, token }))
-}, 3000, { trailing: false })
+}, 1000, { trailing: false })
 
 export default function OTPInput() {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { formStatus, message, clientPw } = useSelector(store => store.auth)
+  const { formStatus, message, clientPw, statusCode } = useSelector(store => store.auth)
   const [errorMessage, setErrorMessage] = useState(message)
 
   useEffect(() => {
@@ -45,6 +46,16 @@ export default function OTPInput() {
       }
     }
   })
+
+  useEffect(() => {
+    if (statusCode) {
+      if (statusCode === 200) {
+        navigate('/auth/recovery/password')
+      }
+      dispatch(clearStatusCode())
+    }
+
+  }, [statusCode])
 
   return (
     <>

@@ -4,7 +4,8 @@ import { usePathname } from "../../hooks/usePathName"
 
 const tokenEnum = {
   '/auth/recovery': ['defaultPw'],
-  '/auth/recovery/code': ['defaultPw', 'clientPw']
+  '/auth/recovery/code': ['defaultPw', 'clientPw'],
+  '/auth/recovery/password': ['defaultPw', 'clientPw', 'secureCodePw'],
 }
 
 const ChainResetPassword = ({ children }) => {
@@ -12,7 +13,7 @@ const ChainResetPassword = ({ children }) => {
   const authStore = useSelector(store => store.auth)
   const hasToken = tokenNames.every(name => !!authStore[name])
   if (!hasToken) {
-    return <Navigate to="/forbidden" />
+    return <Navigate to="/forbidden" replace />
   }
 
   return children

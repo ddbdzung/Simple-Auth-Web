@@ -8,6 +8,7 @@ import AuthenticationLayout from "./AuthenticationLayout";
 import FindAccount from "../pages/find-account/FindAccount";
 import SendResetPwEmail from "../pages/send-resetpw-email/SendResetPwEmail";
 import OTPInput from "../pages/otp-input/OTPInput";
+import ResetPassword from "../pages/reset-password/ResetPassword";
 
 export default function AuthenticationRoute() {
   return (
@@ -40,6 +41,13 @@ export default function AuthenticationRoute() {
           <PublicRoute>
             <ChainResetPassword>
               <OTPInput />
+            </ChainResetPassword>
+          </PublicRoute>
+        } />
+        <Route path="recovery/password" element={
+          <PublicRoute>
+            <ChainResetPassword>
+              <ResetPassword />
             </ChainResetPassword>
           </PublicRoute>
         } />

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { customAxios } from '../../helpers/customAxios'
 
 import { loadState, saveState } from '../../helpers/handleState'
-import { fetchSignIn, fetchSignUp, fetchFindAccount, fetchResetPwEmail, fetchCheckResetPwCode } from './authAPI'
+import { fetchSignIn, fetchSignUp, fetchFindAccount, fetchResetPwEmail, fetchCheckResetPwCode, fetchResetPasswordAsync } from './authAPI'
 
 const initialState = {
   formStatus: 'ready',
@@ -147,6 +147,31 @@ export const checkResetPwCodeAsync = createAsyncThunk(
   }
 )
 
+export const resetPasswordAsync = createAsyncThunk(
+  'auth/fetchResetPasswordAsync',
+  async (payload, { getState }) => {
+    const { access, refresh } = getState().auth
+    try {
+      const response = await fetchResetPasswordAsync({
+        access,
+        refresh,
+      }, payload)
+
+      return response.data
+    } catch (errorResponse) {
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return {
+          code: errorResponse.code,
+          message: errorResponse.message,
+        }
+      }
+
+      const { data } = errorResponse.response
+      return data
+    }
+  }
+)
+
 export const testAsync = createAsyncThunk(
   'auth/fetchTest',
   async (payload, { getState }) => {
@@ -194,11 +219,6 @@ export const authSlice = createSlice({
     clearStatusCode: state => {
       state.statusCode = ''
     },
-    clearResetPwTokens: state => {
-      state.defaultPw = ''
-      state.clientPw = ''
-      state.secureCodePw = ''
-    }
   },
 
   extraReducers: builder => {
@@ -408,7 +428,6 @@ export const authSlice = createSlice({
         }
 
         const { code, message } = action.payload
-        console.log(action.payload)
         if (code === 400) {
           state.formStatus = 'ready'
           state.message = 'Something wrong! Please back to find account and try again!'
@@ -441,6 +460,48 @@ export const authSlice = createSlice({
           return
         }
       })
+
+      .addCase(resetPasswordAsync.pending, state => {
+        state.formStatus = 'loading'
+      })
+      .addCase(resetPasswordAsync.rejected, state => {
+        state.formStatus = 'ready'
+      })
+      .addCase(resetPasswordAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+          return
+        }
+
+        const { code, message } = action.payload
+        if (code === 400) {
+          state.formStatus = 'ready'
+          state.message = 'Something wrong!'
+
+          return
+        } else if (code === 401) {
+          state.formStatus = 'ready'
+          state.message = message
+
+          return
+        } else if (code === 500) {
+          state.formStatus = 'ready'
+          state.message = message
+
+          return
+        } else if (code === 200) {
+          state.formStatus = 'ready'
+          state.statusCode = code
+          state.message = ' Successfully reset password.'
+
+          state.defaultPw = ''
+          state.clientPw = ''
+          state.secureCodePw = ''
+
+          return
+        }
+      })
+
   }
 })
 
