@@ -4,30 +4,32 @@ import throttle from 'lodash.throttle'
 import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
 
-
 import { Link } from 'react-router-dom'
 import {
   clearMessage,
+  clearStatusCode,
   resetpwEmailAsync,
 } from '../../authSlice'
 import RadioBox from '../../../../shared/custom/RadioBox'
 import Alert from '../../../../shared/Alert'
 import { ERROR } from '../../../../constants'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 /**
  * Submit form with throttle wait 3s
  */
-const throttleWrapper = throttle(async (values, actions, dispatch, resetPw) => {
+const throttleWrapper = throttle(async (values, actions, dispatch, defaultPw) => {
   const { option } = values
-  const token = resetPw
+  const token = defaultPw
 
   dispatch(resetpwEmailAsync({ option, token }))
 }, 3000, { trailing: false })
 
 export default function SendResetPwEmail() {
   const dispatch = useDispatch()
-  const { formStatus, message, resetPw } = useSelector(store => store.auth)
+  const navigate = useNavigate()
+  const { formStatus, message, defaultPw, statusCode } = useSelector(store => store.auth)
   const [errorMessage, setErrorMessage] = useState(message)
 
   useEffect(() => {
@@ -44,6 +46,16 @@ export default function SendResetPwEmail() {
       }
     }
   })
+
+  useEffect(() => {
+    if (statusCode) {
+      if (statusCode === 200) {
+        navigate('/auth/recovery/code')
+      }
+      dispatch(clearStatusCode())
+    }
+
+  }, [statusCode])
 
   return (
     <>
@@ -62,7 +74,7 @@ export default function SendResetPwEmail() {
         })
         }
         onSubmit={(values, actions) => {
-          throttleWrapper(values, actions, dispatch, resetPw)
+          throttleWrapper(values, actions, dispatch, defaultPw)
         }}
       >
         <Form className="bg-white rounded-md shadow-2xl p-5">

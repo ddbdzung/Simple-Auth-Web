@@ -14,9 +14,6 @@ module.exports = {
         'templateColor': 'color: rgb(112, 76, 182)',
       }
     },
-    fontSize: {
-      template: 'calc(10px + 2vmin)',
-    }
   },
   plugins: []
 };

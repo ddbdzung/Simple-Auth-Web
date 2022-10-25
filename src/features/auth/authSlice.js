@@ -2,16 +2,19 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { customAxios } from '../../helpers/customAxios'
 
 import { loadState, saveState } from '../../helpers/handleState'
-import { fetchSignIn, fetchSignUp, fetchFindAccount, fetchResetPwEmail } from './authAPI'
+import { fetchSignIn, fetchSignUp, fetchFindAccount, fetchResetPwEmail, fetchCheckResetPwCode } from './authAPI'
 
 const initialState = {
   formStatus: 'ready',
   statusCode: '',
   message: '',
 
+  // Token type
   access: loadState('access')?.access || '',
   refresh: loadState('refresh')?.refresh || '',
-  resetPw: '',
+  defaultPw: '', // Default reset pw token
+  clientPw: '', // Client reset pw token
+  secureCodePw: '', // Secure reset pw token
 
   username: loadState('username')?.username || 'Simple Shop',
   userStatus: '',
@@ -119,6 +122,31 @@ export const resetpwEmailAsync = createAsyncThunk(
   }
 )
 
+export const checkResetPwCodeAsync = createAsyncThunk(
+  'auth/fetchCheckResetPwCode',
+  async (payload, { getState }) => {
+    const { access, refresh } = getState().auth
+    try {
+      const response = await fetchCheckResetPwCode({
+        access,
+        refresh,
+      }, payload)
+
+      return response.data
+    } catch (errorResponse) {
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return {
+          code: errorResponse.code,
+          message: errorResponse.message,
+        }
+      }
+
+      const { data } = errorResponse.response
+      return data
+    }
+  }
+)
+
 export const testAsync = createAsyncThunk(
   'auth/fetchTest',
   async (payload, { getState }) => {
@@ -166,6 +194,11 @@ export const authSlice = createSlice({
     clearStatusCode: state => {
       state.statusCode = ''
     },
+    clearResetPwTokens: state => {
+      state.defaultPw = ''
+      state.clientPw = ''
+      state.secureCodePw = ''
+    }
   },
 
   extraReducers: builder => {
@@ -314,7 +347,7 @@ export const authSlice = createSlice({
           state.statusCode = code
 
           if (action.payload?.data?.token) {
-            state.resetPw = action.payload?.data?.token
+            state.defaultPw = action.payload?.data?.token
           }
 
           return
@@ -336,7 +369,7 @@ export const authSlice = createSlice({
         const { code, message } = action.payload
         if (code === 400) {
           state.formStatus = 'ready'
-          state.message = 'Something wrong! Please try again!'
+          state.message = 'Something wrong! Please back to find account and try again!'
 
           return
         } else if (code === 401) {
@@ -353,12 +386,64 @@ export const authSlice = createSlice({
           state.formStatus = 'ready'
           state.statusCode = code
 
+          const { token } = action.payload?.data
+          if (token) {
+            state.clientPw = token
+          }
+
+          return
+        }
+      })
+
+      .addCase(checkResetPwCodeAsync.pending, state => {
+        state.formStatus = 'loading'
+      })
+      .addCase(checkResetPwCodeAsync.rejected, state => {
+        state.formStatus = 'ready'
+      })
+      .addCase(checkResetPwCodeAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+          return
+        }
+
+        const { code, message } = action.payload
+        console.log(action.payload)
+        if (code === 400) {
+          state.formStatus = 'ready'
+          state.message = 'Something wrong! Please back to find account and try again!'
+
+          return
+        } else if (code === 401) {
+          state.formStatus = 'ready'
+          state.message = 'The number that you\'ve entered doesn\'t match your code. Please try again but no more than 5 times.'
+
+          return
+        } else if (code === 403) {
+          state.formStatus = 'ready'
+          state.message = 'React limit of reset password session!'
+
+          return
+        } else if (code === 500) {
+          state.formStatus = 'ready'
+          state.message = message
+
+          return
+        } else if (code === 200) {
+          state.formStatus = 'ready'
+          state.statusCode = code
+
+          const { token } = action.payload?.data
+          if (token) {
+            state.secureCodePw = token
+          }
+
           return
         }
       })
   }
 })
 
-export const { logOut, clearMessage, clearStatusCode } = authSlice.actions
+export const { logOut, clearMessage, clearStatusCode, cancelResetPassword } = authSlice.actions
 
 export default authSlice.reducer

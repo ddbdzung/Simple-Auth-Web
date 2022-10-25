@@ -11,6 +11,7 @@ import Test from "./shared/Test";
 import PrivateRoute from "./shared/PrivateRoute";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import ForbiddenPage from "./shared/ForbiddenPage";
 
 function Home() {
   return (
@@ -56,6 +57,7 @@ function App() {
         </Route>
         <Route path="/auth/*" element={<AuthenticationRoute />} />
         <Route path="/*" element={<NotFoundPage />} />
+        <Route path="/forbidden" element={<ForbiddenPage />} />
       </Routes>
     </ErrorBoundary >
   );
