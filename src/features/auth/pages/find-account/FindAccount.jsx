@@ -12,6 +12,7 @@ import {
   clearMessage,
   findAccountAsync,
   clearStatusCode,
+  clearResetPasswordEntry,
 } from '../../authSlice'
 import { ERROR } from '../../../../constants'
 import { useState, useEffect } from 'react'
@@ -28,8 +29,15 @@ const throttleWrapper = throttle(async (values, actions, dispatch) => {
 export default function FindAccount() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { formStatus, message, statusCode } = useSelector(store => store.auth)
+  const { formStatus, message, statusCode, hasResetPassword } = useSelector(store => store.auth)
   const [errorMessage, setErrorMessage] = useState(message)
+
+  // Component did mount
+  useEffect(() => {
+    if (hasResetPassword) {
+      dispatch(clearResetPasswordEntry())
+    }
+  }, [])
 
   useEffect(() => {
     if (message) {

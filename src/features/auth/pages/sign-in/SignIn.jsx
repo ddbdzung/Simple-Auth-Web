@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom'
 import {
   clearMessage,
   signInAsync,
+  clearResetPasswordEntry,
 } from '../../authSlice'
 import { ERROR } from '../../../../constants'
 import { useState, useEffect } from 'react'
@@ -29,8 +30,16 @@ const throttleWrapper = throttle(async (values, actions, dispatch) => {
 
 export default function SignIn() {
   const dispatch = useDispatch()
-  const { formStatus, message } = useSelector(store => store.auth)
+  const { formStatus, message, hasResetPassword } = useSelector(store => store.auth)
   const [errorMessage, setErrorMessage] = useState(message)
+
+  // Component did mount
+  useEffect(() => {
+    if (hasResetPassword) {
+      dispatch(clearResetPasswordEntry())
+    }
+  }, [])
+
   useEffect(() => {
     if (message) {
       setErrorMessage(prev => {

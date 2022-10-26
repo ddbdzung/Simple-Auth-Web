@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from 'react'
 
 import TextInput from '../../../../shared/custom/TextInput'
-import { clearMessage, signUpAsync } from '../../authSlice'
+import { clearMessage, signUpAsync, clearResetPasswordEntry } from '../../authSlice'
 import Alert from '../../../../shared/Alert'
 import { ERROR } from '../../../../constants'
 
@@ -26,7 +26,7 @@ const throttleWrapper = throttle(async (values, actions, dispatch) => {
 
 export default function SignUp() {
   const dispatch = useDispatch()
-  const { formStatus, message } = useSelector(store => store.auth)
+  const { formStatus, message, hasResetPassword } = useSelector(store => store.auth)
   const [errorMessage, setErrorMessage] = useState(message)
   useEffect(() => {
     if (message) {
@@ -41,6 +41,13 @@ export default function SignUp() {
       }
     }
   })
+
+  // Component did mount
+  useEffect(() => {
+    if (hasResetPassword) {
+      dispatch(clearResetPasswordEntry())
+    }
+  }, [])
 
   return (
     <>

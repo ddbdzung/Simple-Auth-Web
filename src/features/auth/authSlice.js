@@ -15,6 +15,7 @@ const initialState = {
   defaultPw: '', // Default reset pw token
   clientPw: '', // Client reset pw token
   secureCodePw: '', // Secure reset pw token
+  hasResetPassword: '',
 
   username: loadState('username')?.username || 'Simple Shop',
   userStatus: '',
@@ -218,6 +219,9 @@ export const authSlice = createSlice({
     },
     clearStatusCode: state => {
       state.statusCode = ''
+    },
+    clearResetPasswordEntry: state => {
+      state.hasResetPassword = ''
     },
   },
 
@@ -492,11 +496,12 @@ export const authSlice = createSlice({
         } else if (code === 200) {
           state.formStatus = 'ready'
           state.statusCode = code
-          state.message = ' Successfully reset password.'
+          state.message = 'Successfully reset password.'
 
           state.defaultPw = ''
           state.clientPw = ''
           state.secureCodePw = ''
+          state.hasResetPassword = 'true'
 
           return
         }
@@ -505,6 +510,6 @@ export const authSlice = createSlice({
   }
 })
 
-export const { logOut, clearMessage, clearStatusCode, cancelResetPassword } = authSlice.actions
+export const { logOut, clearMessage, clearStatusCode, clearResetPasswordEntry } = authSlice.actions
 
 export default authSlice.reducer

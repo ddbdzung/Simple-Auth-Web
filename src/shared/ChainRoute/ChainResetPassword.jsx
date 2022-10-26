@@ -9,10 +9,11 @@ const tokenEnum = {
 }
 
 const ChainResetPassword = ({ children }) => {
-  const tokenNames = tokenEnum[usePathname()]
+  const path = usePathname()
+  const tokenNames = tokenEnum[path]
   const authStore = useSelector(store => store.auth)
   const hasToken = tokenNames.every(name => !!authStore[name])
-  if (!hasToken) {
+  if (!hasToken && !authStore?.hasResetPassword) {
     return <Navigate to="/forbidden" replace />
   }
 
