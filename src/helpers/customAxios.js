@@ -21,7 +21,7 @@ const request = method => async (api, tokens, data) => {
   const body = {
     method,
     data,
-    url: `${URL.BASE_DEV}${URL.API_ENTRY}${api}`,
+    url: `${URL.BASE_DOMAIN}${URL.API_ENTRY}${api}`,
   }
   if (Object.keys(headers).length > 0) {
     body.headers = headers

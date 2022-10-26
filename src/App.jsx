@@ -15,7 +15,7 @@ import ForbiddenPage from "./shared/ForbiddenPage";
 
 function Home() {
   return (
-    <span className="inline-block mt-20">Home page</span>
+    <span className="inline-block mt-20" > Home page</span >
   )
 }
 
