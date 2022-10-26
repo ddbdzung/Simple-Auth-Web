@@ -21,7 +21,7 @@ const Alert = ({ type, title, contents, id }) => {
     <>
       {content ? (
         <div style={{ backgroundColor: type }}
-          className={`text-white px-6 py-4 border-0 rounded relative mb-4`}
+          className={`text-white z-50 px-6 py-4 border-0 rounded-md relative mb-4`}
         >
           <span className="text-xl inline-block mr-5 align-middle">
             <div className="w-6 h-6">

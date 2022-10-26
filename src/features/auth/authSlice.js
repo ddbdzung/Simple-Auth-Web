@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { customAxios } from '../../helpers/customAxios'
 
 import { loadState, saveState } from '../../helpers/handleState'
-import { fetchSignIn, fetchSignUp, fetchFindAccount, fetchResetPwEmail, fetchCheckResetPwCode, fetchResetPasswordAsync } from './authAPI'
+import { fetchSignIn, fetchSignUp, fetchFindAccount, fetchResetPwEmail, fetchCheckResetPwCode, fetchResetPasswordAsync, fetchSendValidateEmailAsync } from './authAPI'
 
 const initialState = {
   formStatus: 'ready',
@@ -18,9 +18,10 @@ const initialState = {
   hasResetPassword: '',
 
   username: loadState('username')?.username || 'Simple Shop',
-  userStatus: '',
-  id: '',
-  role: '',
+  userStatus: loadState('userStatus')?.userStatus || '',
+  email: loadState('email')?.email || '',
+  id: loadState('id')?.id || '',
+  role: loadState('role')?.role || '',
   slug: '',
 }
 
@@ -173,6 +174,33 @@ export const resetPasswordAsync = createAsyncThunk(
   }
 )
 
+export const sendValidateEmailAsync = createAsyncThunk(
+  'auth/fetchSendValidateEmailAsync',
+  async (payload, { getState }) => {
+    const { access, refresh } = getState().auth
+    try {
+      const response = await fetchSendValidateEmailAsync({
+        access,
+        refresh,
+      }, payload)
+
+      return response.data
+    } catch (errorResponse) {
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return {
+          code: errorResponse.code,
+          message: errorResponse.message,
+        }
+      }
+
+      const { data } = errorResponse.response
+      return data
+    }
+  }
+)
+
+
+
 export const testAsync = createAsyncThunk(
   'auth/fetchTest',
   async (payload, { getState }) => {
@@ -213,6 +241,10 @@ export const authSlice = createSlice({
       localStorage.removeItem('username')
       localStorage.removeItem('access')
       localStorage.removeItem('refresh')
+      localStorage.removeItem('userStatus')
+      localStorage.removeItem('email')
+      localStorage.removeItem('id')
+      localStorage.removeItem('role')
     },
     clearMessage: state => {
       state.message = ''
@@ -258,6 +290,10 @@ export const authSlice = createSlice({
           saveState('access', tokens.access.token);
           saveState('refresh', tokens.refresh.token);
           saveState('username', user.username);
+          saveState('userStatus', user.userStatus);
+          saveState('email', user.email);
+          saveState('id', user.id);
+          saveState('role', user.role);
 
           state.access = tokens.access.token
           state.refresh = tokens.refresh.token
@@ -267,6 +303,7 @@ export const authSlice = createSlice({
           state.userStatus = user.status
           state.username = user.username
           state.role = user.role
+          state.email = user.email
           return
         }
       })
@@ -300,6 +337,10 @@ export const authSlice = createSlice({
           saveState('access', tokens.access.token);
           saveState('refresh', tokens.refresh.token);
           saveState('username', user.username);
+          saveState('userStatus', user.status);
+          saveState('email', user.email);
+          saveState('id', user.id);
+          saveState('role', user.role);
 
           state.access = tokens.access.token
           state.refresh = tokens.refresh.token
@@ -309,6 +350,7 @@ export const authSlice = createSlice({
           state.userStatus = user.status
           state.username = user.username
           state.role = user.role
+          state.email = user.email
 
           document.title = user.username
           return
@@ -502,6 +544,27 @@ export const authSlice = createSlice({
           state.clientPw = ''
           state.secureCodePw = ''
           state.hasResetPassword = 'true'
+
+          return
+        }
+      })
+
+      .addCase(sendValidateEmailAsync.pending, state => {
+        // state.formStatus = 'loading'
+      })
+      .addCase(sendValidateEmailAsync.rejected, state => {
+        // state.formStatus = 'ready'
+      })
+      .addCase(sendValidateEmailAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+          return
+        }
+        console.log(action)
+        const { code, message } = action.payload
+        if ([400, 403, 500, 200, 201, 500].includes(code)) {
+          state.statusCode = code
+          state.message = message
 
           return
         }
