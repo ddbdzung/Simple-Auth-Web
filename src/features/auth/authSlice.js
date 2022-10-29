@@ -290,7 +290,7 @@ export const authSlice = createSlice({
           saveState('access', tokens.access.token);
           saveState('refresh', tokens.refresh.token);
           saveState('username', user.username);
-          saveState('userStatus', user.userStatus);
+          saveState('userStatus', user.status);
           saveState('email', user.email);
           saveState('id', user.id);
           saveState('role', user.role);

@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from "react-redux"
 import { Navigate, NavLink } from "react-router-dom"
 import { v4 as uuidv4 } from 'uuid';
 
+import { ssEvents } from '../../configs'
 import { ERROR, SUCCESS, INFO } from '../../constants';
 import { clearMessage, clearStatusCode, logOut, sendValidateEmailAsync } from '../../features/auth/authSlice'
 import Alert from '../Alert';
@@ -29,7 +30,14 @@ function Header(props) {
   const { message, username, email, userStatus, statusCode } = useSelector(store => store.auth)
   const [statusMessage, setStatusMessage] = useState(message)
   const [notifType, setNotifType] = useState(ERROR)
-  const [notifTitle, setNotifTitle] = useState('error')
+  const [notifTitle, setNotifTitle] = useState('error');
+
+  const handleSSEClick = useCallback(() => {
+    fetch(`http://localhost:2703/api/v1/auth/sse/test`)
+      .then(res => res.json())
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+  })
 
   useEffect(() => {
     if (message) {
@@ -40,6 +48,7 @@ function Header(props) {
       if (message) {
         dispatch(clearMessage())
       }
+
       if (statusMessage) {
         setTimeout(() => setStatusMessage(''), 3000)
       }
@@ -47,15 +56,47 @@ function Header(props) {
   })
 
   useEffect(() => {
+    console.log('Component did mount')
+    if (userStatus === 'inactive') {
+      ssEvents.addEventListener('open', event => {
+        console.log('set up')
+        console.log(event)
+      })
+
+      ssEvents.addEventListener('error', err => {
+        console.log('error')
+        console.log(err)
+      })
+
+      ssEvents.addEventListener('post', msgEvent => {
+        console.log('post')
+        console.log(msgEvent)
+      })
+    }
+
+    return () => {
+      console.log('Component unmounted')
+      if (ssEvents) {
+        if (ssEvents.readyState === 1) {
+          ssEvents.close()
+          console.log('Exited')
+        }
+      }
+    }
+  }, [])
+
+  useEffect(() => {
     if (statusCode) {
       if (statusCode === 200 || statusCode === 201) {
         setNotifType(SUCCESS)
         setNotifTitle('success')
         setStatusMessage(message)
+
       } else if (!statusCode) {
         setNotifType(INFO)
         setNotifTitle('info')
         setStatusMessage('Email already sent. Please check your mailbox')
+
       } else if (statusCode === 400 || statusCode === 403 || statusCode === 500) {
         setNotifType(ERROR)
         setNotifTitle('error')
@@ -94,6 +135,7 @@ function Header(props) {
           {userStatus}
         </h3>
       </div>
+
       <ul className="flex flex-row justify-start gap-8 py-4 opacity-80 z-10 fixed top-0 left-0 right-0">
         <li
           className={defaultLinkStyle}>
@@ -102,6 +144,10 @@ function Header(props) {
         <li
           className={defaultLinkStyle}>
           <NavLink to="/abc">Not found page</NavLink>
+        </li>
+        <li
+          className={defaultLinkStyle}>
+          <button type="button" onClick={handleSSEClick}>Test SSE</button>
         </li>
         {(userStatus === 'inactive')
           ? <li>
@@ -114,7 +160,7 @@ function Header(props) {
           </li>
           : <li>
             <button
-              className="cursor-default opacity-70 block w-full basis-16 bg-indigo-600 py-2 px-5 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2"
+              className="cursor-default opacity-70 block w-full basis-16 bg-indigo-600 py-2 px-5 rounded-2xl hover:bg-indigo-700 text-white font-semibold mb-2"
             >
               Activate account
             </button>
