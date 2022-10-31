@@ -103,9 +103,8 @@ export async function fetchResetPasswordAsync(tokens, payload) {
 }
 
 export async function fetchSendValidateEmailAsync(tokens, payload) {
-  const api = `/auth/confirm-email`
-  const data = {
-    email: payload,
-  }
+  const api = `/user/confirm-email`
+  const data = {}
+
   return customAxios.post(api, tokens, data)
 }
