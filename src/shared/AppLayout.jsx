@@ -8,7 +8,6 @@ AppLayout.propTypes = {
 
 };
 
-
 function AppLayout(props) {
   return (
     <div className="bg-slate-300 min-h-screen">

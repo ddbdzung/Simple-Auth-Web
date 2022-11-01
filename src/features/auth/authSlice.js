@@ -227,7 +227,7 @@ export const testAsync = createAsyncThunk(
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-
+  // ! Reducers here
   reducers: {
     logOut: state => {
       state.id = ''
@@ -246,6 +246,11 @@ export const authSlice = createSlice({
       localStorage.removeItem('id')
       localStorage.removeItem('role')
     },
+    activateAccount: state => {
+      state.userStatus = 'active'
+      state.statusCode = 200
+      state.message = 'Activate account successfully!'
+    },
     clearMessage: state => {
       state.message = ''
     },
@@ -257,6 +262,7 @@ export const authSlice = createSlice({
     },
   },
 
+  // ! Extra Reducers here
   extraReducers: builder => {
     builder
       // handle signUpAsync cases
@@ -560,7 +566,6 @@ export const authSlice = createSlice({
           state.message = action.payload.message
           return
         }
-        console.log(action)
         const { code, message } = action.payload
         if ([400, 403, 500, 200, 201, 500].includes(code)) {
           state.statusCode = code
@@ -573,6 +578,12 @@ export const authSlice = createSlice({
   }
 })
 
-export const { logOut, clearMessage, clearStatusCode, clearResetPasswordEntry } = authSlice.actions
+export const {
+  logOut,
+  activateAccount,
+  clearMessage,
+  clearStatusCode,
+  clearResetPasswordEntry,
+} = authSlice.actions
 
 export default authSlice.reducer

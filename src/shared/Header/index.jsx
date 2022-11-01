@@ -5,9 +5,14 @@ import { useDispatch } from "react-redux"
 import { Navigate, NavLink } from "react-router-dom"
 import { v4 as uuidv4 } from 'uuid';
 
-import { ssEvents } from '../../configs'
-import { ERROR, SUCCESS, INFO } from '../../constants';
-import { clearMessage, clearStatusCode, logOut, sendValidateEmailAsync } from '../../features/auth/authSlice'
+import { ERROR, SUCCESS, INFO, API_ENTRY, BASE_DOMAIN } from '../../constants';
+import {
+  activateAccount,
+  clearMessage,
+  clearStatusCode,
+  logOut,
+  sendValidateEmailAsync
+} from '../../features/auth/authSlice'
 import Alert from '../Alert';
 
 export default Header;
@@ -25,6 +30,9 @@ const handleSendMail = (dispatch, email) => {
 }
 
 function Header(props) {
+  const ssEvents = useMemo(() => {
+    return new EventSource(`${BASE_DOMAIN}${API_ENTRY}/sse/activate-account`)
+  }, [1])
   const defaultLinkStyle = 'border-4 border-black p-1 bg-yellow-300 text-green-600 text-xl rounded-md'
   const dispatch = useDispatch()
   const { message, username, email, userStatus, statusCode } = useSelector(store => store.auth)
@@ -32,12 +40,17 @@ function Header(props) {
   const [notifType, setNotifType] = useState(ERROR)
   const [notifTitle, setNotifTitle] = useState('error');
 
-  const handleSSEClick = useCallback(() => {
-    fetch(`http://localhost:2703/api/v1/auth/sse/test`)
-      .then(res => res.json())
-      .then(res => console.log(res))
-      .catch(err => console.log(err))
-  })
+  if (userStatus === 'inactive' && ssEvents) {
+    ssEvents.addEventListener('error', err => {
+      console.log(err)
+    })
+
+    ssEvents.addEventListener('activateAccount', msgEvent => {
+      if (userStatus === 'inactive') {
+        dispatch(activateAccount())
+      }
+    })
+  }
 
   useEffect(() => {
     if (message) {
@@ -56,30 +69,14 @@ function Header(props) {
   })
 
   useEffect(() => {
-    console.log('Component did mount')
-    if (userStatus === 'inactive') {
-      ssEvents.addEventListener('open', event => {
-        console.log('set up')
-        console.log(event)
-      })
-
-      ssEvents.addEventListener('error', err => {
-        console.log('error')
-        console.log(err)
-      })
-
-      ssEvents.addEventListener('post', msgEvent => {
-        console.log('post')
-        console.log(msgEvent)
-      })
+    if (userStatus && userStatus !== 'inactive') {
+      ssEvents.close();
     }
 
     return () => {
-      console.log('Component unmounted')
       if (ssEvents) {
-        if (ssEvents.readyState === 1) {
+        if (ssEvents.readyState === 1 || ssEvents.readyState === 0) {
           ssEvents.close()
-          console.log('Exited')
         }
       }
     }
@@ -144,10 +141,6 @@ function Header(props) {
         <li
           className={defaultLinkStyle}>
           <NavLink to="/abc">Not found page</NavLink>
-        </li>
-        <li
-          className={defaultLinkStyle}>
-          <button type="button" onClick={handleSSEClick}>Test SSE</button>
         </li>
         {(userStatus === 'inactive')
           ? <li>
