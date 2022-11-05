@@ -31,7 +31,7 @@ const handleSendMail = (dispatch, email) => {
 
 function Header(props) {
   const ssEvents = useMemo(() => {
-    return new EventSource(`${BASE_DOMAIN}${API_ENTRY}/sse/activate-account`)
+    return new EventSource(`${BASE_DOMAIN}${API_ENTRY}/sse/activate-account`, { withCredentials: true })
   }, [1])
   const defaultLinkStyle = 'border-4 border-black p-1 bg-yellow-300 text-green-600 text-xl rounded-md'
   const dispatch = useDispatch()

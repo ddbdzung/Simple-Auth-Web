@@ -378,13 +378,16 @@ export const authSlice = createSlice({
 
         const { code, message } = action.payload
         if (code === 400 || code === 401) {
+          state.statusCode = code
           state.message = message
           return
         } else if (code === 500) {
+          state.statusCode = code
           state.message = message
           return
 
         } else if (code === 200) {
+          state.statusCode = code
           state.message = message
           return
         }
