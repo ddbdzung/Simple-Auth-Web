@@ -1,11 +1,11 @@
 import { useDispatch } from "react-redux"
 import { Navigate } from "react-router-dom"
 
-import { logOut } from '../../authSlice'
+import { logOutAsync } from '../../authSlice'
 
 const LogOut = () => {
   const dispatch = useDispatch()
-  dispatch(logOut())
+  dispatch(logOutAsync())
 
   return <Navigate to='/auth/sign-in' />
 }

@@ -1,110 +1,51 @@
+import { authAxios } from '../../configs/axios.mjs'
 import { customAxios } from '../../helpers/customAxios'
 
 export async function fetchSignUp(token, payload) {
   const api = `/auth/register`
-  const access = token?.access
-  const refresh = token?.refresh
-  if (access && refresh) {
-    // Ignore calling API because user already sign-in to application
-    // return API Error
-    const APIError = {
-      code: 403,
-      message: 'FORBIDDEN',
-      data: [],
-    }
-    return Promise.resolve(APIError)
-  }
+
   return customAxios.post(api, token, payload)
 }
 
 export async function fetchSignIn(tokens, payload) {
   const api = `/auth/sign-in`
-  const access = tokens?.access
-  const refresh = tokens?.refresh
-  if (access && refresh) {
-    // Ignore calling API because user already sign-in to application
-    // return API Error
-    const APIError = {
-      code: 403,
-      message: 'FORBIDDEN',
-      data: [],
-    }
-    return Promise.resolve(APIError)
-  }
+
   return customAxios.post(api, tokens, payload)
 }
 
 export async function fetchFindAccount(tokens, payload) {
   const api = `/auth/find-account`
-  const access = tokens?.access
-  const refresh = tokens?.refresh
-  if (access && refresh) {
-    // Ignore calling API because user already sign-in to application
-    // return API Error
-    const APIError = {
-      code: 403,
-      message: 'FORBIDDEN',
-      data: [],
-    }
-    return Promise.resolve(APIError)
-  }
+
   return customAxios.post(api, tokens, payload)
 }
 
 export async function fetchResetPwEmail(tokens, payload) {
   const api = `/auth/resetpw-email`
-  const access = tokens?.access
-  const refresh = tokens?.refresh
-  if (access && refresh) {
-    // Ignore calling API because user already sign-in to application
-    // return API Error
-    const APIError = {
-      code: 403,
-      message: 'FORBIDDEN',
-      data: [],
-    }
-    return Promise.resolve(APIError)
-  }
+
   return customAxios.post(api, tokens, payload)
 }
 
 export async function fetchCheckResetPwCode(tokens, payload) {
   const api = `/auth/confirm-pwcode`
-  const access = tokens?.access
-  const refresh = tokens?.refresh
-  if (access && refresh) {
-    // Ignore calling API because user already sign-in to application
-    // return API Error
-    const APIError = {
-      code: 403,
-      message: 'FORBIDDEN',
-      data: [],
-    }
-    return Promise.resolve(APIError)
-  }
+
   return customAxios.post(api, tokens, payload)
 }
 
 export async function fetchResetPasswordAsync(tokens, payload) {
   const api = `/auth/reset-pw`
-  const access = tokens?.access
-  const refresh = tokens?.refresh
-  if (access && refresh) {
-    // Ignore calling API because user already sign-in to application
-    // return API Error
-    const APIError = {
-      code: 403,
-      message: 'FORBIDDEN',
-      data: [],
-    }
-    return Promise.resolve(APIError)
-  }
+
   return customAxios.post(api, tokens, payload)
 }
 
-export async function fetchSendValidateEmailAsync(tokens, payload) {
+export async function fetchSendValidateEmailAsync(tokens, _payload) {
   const api = `/user/confirm-email`
-  const data = {}
 
-  return customAxios.post(api, tokens, data)
+  return customAxios.post(api, tokens, {})
+}
+
+export async function fetchLogOutAsync(tokens, _payload) {
+  const api = `/auth/sign-out`
+
+  // return customAxios.post(api, tokens, { refresh: tokens.refresh })
+  return authAxios.post(api, { refresh: tokens.refresh })
 }

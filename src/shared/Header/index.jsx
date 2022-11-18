@@ -10,7 +10,7 @@ import {
   activateAccount,
   clearMessage,
   clearStatusCode,
-  logOut,
+  logOutAsync,
   sendValidateEmailAsync
 } from '../../features/auth/authSlice'
 import Alert from '../Alert';
@@ -22,7 +22,7 @@ Header.propTypes = {
 };
 
 const handleLogOut = (dispatch) => {
-  dispatch(logOut())
+  dispatch(logOutAsync())
   return <Navigate to='/auth/sign-in' />
 }
 const handleSendMail = (dispatch, email) => {

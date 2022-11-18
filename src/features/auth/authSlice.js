@@ -1,8 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { customAxios } from '../../helpers/customAxios'
 
+import { customAxios } from '../../helpers/customAxios'
+import { authAxios } from '../../configs/axios.mjs'
 import { loadState, saveState } from '../../helpers/handleState'
-import { fetchSignIn, fetchSignUp, fetchFindAccount, fetchResetPwEmail, fetchCheckResetPwCode, fetchResetPasswordAsync, fetchSendValidateEmailAsync } from './authAPI'
+import {
+  fetchSignIn,
+  fetchSignUp,
+  fetchFindAccount,
+  fetchResetPwEmail,
+  fetchCheckResetPwCode,
+  fetchResetPasswordAsync,
+  fetchSendValidateEmailAsync,
+  fetchLogOutAsync
+} from './authAPI'
 
 const initialState = {
   formStatus: 'ready',
@@ -30,22 +40,19 @@ export const signUpAsync = createAsyncThunk(
   async (payload, { getState }) => {
     const { access, refresh } = getState().auth
     try {
-      const response = await fetchSignUp({
+      const { data } = await fetchSignUp({
         access,
         refresh,
       }, payload)
 
-      return response.data
+      return data
     } catch (errorResponse) {
+      const { code, message } = errorResponse
       if (errorResponse.code === 'ERR_NETWORK') {
-        return {
-          code: errorResponse.code,
-          message: errorResponse.message,
-        }
+        return { code, message }
       }
 
-      const { data } = errorResponse.response
-      return data
+      return errorResponse.response.data
     }
   }
 )
@@ -55,22 +62,19 @@ export const signInAsync = createAsyncThunk(
   async (payload, { getState }) => {
     const { access, refresh } = getState().auth
     try {
-      const response = await fetchSignIn({
+      const { data } = await fetchSignIn({
         access,
         refresh,
       }, payload)
 
-      return response.data
+      return data
     } catch (errorResponse) {
+      const { code, message } = errorResponse
       if (errorResponse.code === 'ERR_NETWORK') {
-        return {
-          code: errorResponse.code,
-          message: errorResponse.message,
-        }
+        return { code, message }
       }
 
-      const { data } = errorResponse.response
-      return data
+      return errorResponse.response.data
     }
   }
 )
@@ -79,22 +83,19 @@ export const findAccountAsync = createAsyncThunk(
   async (payload, { getState }) => {
     const { access, refresh } = getState().auth
     try {
-      const response = await fetchFindAccount({
+      const { data } = await fetchFindAccount({
         access,
         refresh,
       }, payload)
 
-      return response.data
+      return data
     } catch (errorResponse) {
+      const { code, message } = errorResponse
       if (errorResponse.code === 'ERR_NETWORK') {
-        return {
-          code: errorResponse.code,
-          message: errorResponse.message,
-        }
+        return { code, message }
       }
 
-      const { data } = errorResponse.response
-      return data
+      return errorResponse.response.data
     }
   }
 )
@@ -104,22 +105,19 @@ export const resetpwEmailAsync = createAsyncThunk(
   async (payload, { getState }) => {
     const { access, refresh } = getState().auth
     try {
-      const response = await fetchResetPwEmail({
+      const { data } = await fetchResetPwEmail({
         access,
         refresh,
       }, payload)
 
-      return response.data
+      return data
     } catch (errorResponse) {
+      const { code, message } = errorResponse
       if (errorResponse.code === 'ERR_NETWORK') {
-        return {
-          code: errorResponse.code,
-          message: errorResponse.message,
-        }
+        return { code, message }
       }
 
-      const { data } = errorResponse.response
-      return data
+      return errorResponse.response.data
     }
   }
 )
@@ -129,22 +127,19 @@ export const checkResetPwCodeAsync = createAsyncThunk(
   async (payload, { getState }) => {
     const { access, refresh } = getState().auth
     try {
-      const response = await fetchCheckResetPwCode({
+      const { data } = await fetchCheckResetPwCode({
         access,
         refresh,
       }, payload)
 
-      return response.data
+      return data
     } catch (errorResponse) {
+      const { code, message } = errorResponse
       if (errorResponse.code === 'ERR_NETWORK') {
-        return {
-          code: errorResponse.code,
-          message: errorResponse.message,
-        }
+        return { code, message }
       }
 
-      const { data } = errorResponse.response
-      return data
+      return errorResponse.response.data
     }
   }
 )
@@ -154,22 +149,19 @@ export const resetPasswordAsync = createAsyncThunk(
   async (payload, { getState }) => {
     const { access, refresh } = getState().auth
     try {
-      const response = await fetchResetPasswordAsync({
+      const { data } = await fetchResetPasswordAsync({
         access,
         refresh,
       }, payload)
 
-      return response.data
+      return data
     } catch (errorResponse) {
+      const { code, message } = errorResponse
       if (errorResponse.code === 'ERR_NETWORK') {
-        return {
-          code: errorResponse.code,
-          message: errorResponse.message,
-        }
+        return { code, message }
       }
 
-      const { data } = errorResponse.response
-      return data
+      return errorResponse.response.data
     }
   }
 )
@@ -179,35 +171,52 @@ export const sendValidateEmailAsync = createAsyncThunk(
   async (payload, { getState }) => {
     const { access, refresh } = getState().auth
     try {
-      const response = await fetchSendValidateEmailAsync({
+      const { data } = await fetchSendValidateEmailAsync({
+        access,
+        refresh,
+      }, payload)
+
+      return data
+    } catch (errorResponse) {
+      const { code, message } = errorResponse
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return { code, message }
+      }
+
+      return errorResponse.response.data
+    }
+  }
+)
+
+export const logOutAsync = createAsyncThunk(
+  'auth/fetchLogOutAsync',
+  async (payload, { getState }) => {
+    const { access, refresh } = getState().auth
+    try {
+      const response = await fetchLogOutAsync({
         access,
         refresh,
       }, payload)
 
       return response.data
     } catch (errorResponse) {
+      const { code, message } = errorResponse
       if (errorResponse.code === 'ERR_NETWORK') {
-        return {
-          code: errorResponse.code,
-          message: errorResponse.message,
-        }
+        return { code, message }
       }
 
-      const { data } = errorResponse.response
-      return data
+      return errorResponse.response.data
     }
   }
 )
 
-
-
 export const testAsync = createAsyncThunk(
   'auth/fetchTest',
-  async (payload, { getState }) => {
-    const { access, refresh } = getState().auth
-
+  async (_payload, { getState }) => {
     try {
-      const response = await customAxios.post('/auth/test', { access, refresh }, payload)
+      const response = await authAxios.post('/auth/test', {
+        refresh: getState().auth.refresh,
+      })
 
       return response.data
     } catch (errorResponse) {
@@ -218,7 +227,7 @@ export const testAsync = createAsyncThunk(
         }
       }
 
-      const { data } = errorResponse.response
+      const data = errorResponse.response?.data
       return data
     }
   }
@@ -229,23 +238,6 @@ export const authSlice = createSlice({
   initialState,
   // ! Reducers here
   reducers: {
-    logOut: state => {
-      state.id = ''
-      state.slug = ''
-      state.userStatus = ''
-      state.username = 'simple shop'
-      state.role = ''
-      state.access = ''
-      state.refresh = ''
-
-      localStorage.removeItem('username')
-      localStorage.removeItem('access')
-      localStorage.removeItem('refresh')
-      localStorage.removeItem('userStatus')
-      localStorage.removeItem('email')
-      localStorage.removeItem('id')
-      localStorage.removeItem('role')
-    },
     activateAccount: state => {
       state.userStatus = 'active'
       state.statusCode = 200
@@ -282,11 +274,7 @@ export const authSlice = createSlice({
         }
 
         const { code, message } = action.payload
-        if (code === 400 || code === 401) {
-          state.formStatus = 'ready'
-          state.message = message
-          return
-        } else if (code === 500) {
+        if ([400, 401, 500].includes(code)) {
           state.formStatus = 'ready'
           state.message = message
           return
@@ -328,15 +316,10 @@ export const authSlice = createSlice({
         }
 
         const { code, message } = action.payload
-        if (code === 400 || code === 401) {
+        if ([400, 401, 500].includes(code)) {
           state.formStatus = 'ready'
           state.message = message
           return
-        } else if (code === 500) {
-          state.formStatus = 'ready'
-          state.message = message
-          return
-
         } else if (code === 200) {
           state.formStatus = 'ready'
           const { tokens, user } = action.payload.data
@@ -364,31 +347,26 @@ export const authSlice = createSlice({
 
       })
 
-      .addCase(testAsync.pending, state => {
-
-      })
       .addCase(testAsync.rejected, (state, action) => {
-
+        state.formStatus = 'ready'
       })
       .addCase(testAsync.fulfilled, (state, action) => {
         if (action?.payload?.code === 'ERR_NETWORK') {
           state.message = action.payload.message
+
           return
         }
 
         const { code, message } = action.payload
-        if (code === 400 || code === 401) {
+        if ([200, 201, 400, 401, 500].includes(code)) {
           state.statusCode = code
           state.message = message
-          return
-        } else if (code === 500) {
-          state.statusCode = code
-          state.message = message
-          return
 
-        } else if (code === 200) {
+          return
+        } else if (code === 403) {
           state.statusCode = code
-          state.message = message
+          state.message = 'There is some malicious action that affect your account. Please log out and re-authenticate again!'
+
           return
         }
 
@@ -403,6 +381,7 @@ export const authSlice = createSlice({
       .addCase(findAccountAsync.fulfilled, (state, action) => {
         if (action?.payload?.code === 'ERR_NETWORK') {
           state.message = action.payload.message
+
           return
         }
 
@@ -447,12 +426,7 @@ export const authSlice = createSlice({
           state.message = 'Something wrong! Please back to find account and try again!'
 
           return
-        } else if (code === 401) {
-          state.formStatus = 'ready'
-          state.message = message
-
-          return
-        } else if (code === 500) {
+        } if ([401, 500].includes(code)) {
           state.formStatus = 'ready'
           state.message = message
 
@@ -534,12 +508,7 @@ export const authSlice = createSlice({
           state.message = 'Something wrong!'
 
           return
-        } else if (code === 401) {
-          state.formStatus = 'ready'
-          state.message = message
-
-          return
-        } else if (code === 500) {
+        } else if ([401, 500].includes(code)) {
           state.formStatus = 'ready'
           state.message = message
 
@@ -558,21 +527,48 @@ export const authSlice = createSlice({
         }
       })
 
-      .addCase(sendValidateEmailAsync.pending, state => {
-        // state.formStatus = 'loading'
-      })
-      .addCase(sendValidateEmailAsync.rejected, state => {
-        // state.formStatus = 'ready'
-      })
       .addCase(sendValidateEmailAsync.fulfilled, (state, action) => {
         if (action?.payload?.code === 'ERR_NETWORK') {
           state.message = action.payload.message
           return
         }
         const { code, message } = action.payload
-        if ([400, 403, 500, 200, 201, 500].includes(code)) {
+        if ([400, 403, 500, 200, 201].includes(code)) {
           state.statusCode = code
           state.message = message
+
+          return
+        }
+      })
+
+      .addCase(logOutAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+
+          return
+        }
+
+        const { code, message } = action.payload
+
+        if ([200, 400, 404, 500].includes(code)) {
+          state.statusCode = code
+          state.message = message
+
+          state.id = ''
+          state.slug = ''
+          state.userStatus = ''
+          state.username = 'simple shop'
+          state.role = ''
+          state.access = ''
+          state.refresh = ''
+
+          localStorage.removeItem('username')
+          localStorage.removeItem('access')
+          localStorage.removeItem('refresh')
+          localStorage.removeItem('userStatus')
+          localStorage.removeItem('email')
+          localStorage.removeItem('id')
+          localStorage.removeItem('role')
 
           return
         }
@@ -582,7 +578,6 @@ export const authSlice = createSlice({
 })
 
 export const {
-  logOut,
   activateAccount,
   clearMessage,
   clearStatusCode,
