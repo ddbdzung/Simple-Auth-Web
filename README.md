@@ -1,4 +1,6 @@
-# Vite React Starter
+# Simple Shop Web
+
+### View demo [here](https://simpleshopweb.netlify.app)
 
 ![Vite](https://img.shields.io/badge/-Vite-646CFF?logo=vite&logoColor=white&style=for-the-badge)
 ![Babel](https://img.shields.io/badge/Babel-F9DC3e?style=for-the-badge&logo=babel&logoColor=black)
@@ -68,27 +70,23 @@ After that the syntax is the same as `npm` e.g. `npm install` becomes `pnpm inst
 2. Extract the content to a new directory, rename it and cd the directory.
 3. Install all dependencies using:
 
-- `npm install` or `pnpm install` or `yarn`
+- `pnpm install`
 
 ## Scripts
 
 ### Start dev server
 
-- `npm run dev` or `pnpm run dev` or `yarn run dev` and open the browser at `http://localhost:3000`
+- `pnpm run dev` and open the browser at `http://127.0.0.1:4173`
 
 ### Build for production
 
-- `npm run build` or `pnpm run build` or `yarn run build`
+- `pnpm run build`
 
 ### Locally preview production build
 
-After creating the production build, run:
-
-- `npm run preview` or `yarn run preview`
-
 ### Start server
 
-- `npm run serve` or `pnpm run serve` or `yarn run serve` and open the browser at `http://localhost:4173`
+- `pnpm run serve` and open the browser at `http://127.0.0.1:5173`
 
 ## License
 
