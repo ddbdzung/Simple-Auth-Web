@@ -3,6 +3,8 @@ import { Formik, Form } from 'formik'
 import throttle from 'lodash.throttle'
 import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { Link } from 'react-router-dom'
 import {
@@ -13,8 +15,7 @@ import {
 import RadioBox from '../../../../shared/custom/RadioBox'
 import Alert from '../../../../shared/Alert'
 import { ERROR } from '../../../../constants'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import hideMail from '../../../../helpers/hideMail.mjs'
 
 /**
  * Submit form with throttle wait 3s
@@ -29,7 +30,7 @@ const throttleWrapper = throttle(async (values, actions, dispatch, defaultPw) =>
 export default function SendResetPwEmail() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { formStatus, message, defaultPw, statusCode } = useSelector(store => store.auth)
+  const { formStatus, message, defaultPw, statusCode, email } = useSelector(store => store.auth)
   const [errorMessage, setErrorMessage] = useState(message)
 
   useEffect(() => {
@@ -83,7 +84,7 @@ export default function SendResetPwEmail() {
           <div className="flex items-center mb-8 py-2 px-3">
             <RadioBox name="option" value="byEmail" className="hover:bg-slate-100">
               <span className="ml-2 inline-block w-full">
-                Send code via email d********l@gmail.com
+                Send code via email {hideMail(email)}
               </span>
             </RadioBox>
           </div>

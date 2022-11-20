@@ -6,11 +6,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
+
 import {
   clearMessage,
   checkResetPwCodeAsync,
   clearStatusCode,
 } from '../../authSlice'
+import hideMail from '../../../../helpers/hideMail.mjs'
 import Alert from '../../../../shared/Alert'
 import TextInput from '../../../../shared/custom/TextInput'
 import { ERROR } from '../../../../constants'
@@ -29,7 +31,7 @@ const throttleWrapper = throttle(async (values, actions, dispatch, clientPw) => 
 export default function OTPInput() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { formStatus, message, clientPw, statusCode } = useSelector(store => store.auth)
+  const { formStatus, message, clientPw, statusCode, email } = useSelector(store => store.auth)
   const [errorMessage, setErrorMessage] = useState(message)
 
   useEffect(() => {
@@ -92,7 +94,7 @@ export default function OTPInput() {
                   We sent your code to:
                 </div>
                 <div>
-                  d********l@gmail.com
+                  {hideMail(email)}
                 </div>
               </div>
             </div>

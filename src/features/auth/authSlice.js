@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import jwt_decode from "jwt-decode";
 
-import { customAxios } from '../../helpers/customAxios'
 import { authAxios } from '../../configs/axios.mjs'
 import { loadState, saveState } from '../../helpers/handleState'
 import {
@@ -78,6 +78,7 @@ export const signInAsync = createAsyncThunk(
     }
   }
 )
+
 export const findAccountAsync = createAsyncThunk(
   'auth/fetchFindAccount',
   async (payload, { getState }) => {
@@ -402,6 +403,8 @@ export const authSlice = createSlice({
 
           if (action.payload?.data?.token) {
             state.defaultPw = action.payload?.data?.token
+            const { email } = jwt_decode(action.payload?.data?.token)
+            state.email = email
           }
 
           return
@@ -522,6 +525,7 @@ export const authSlice = createSlice({
           state.clientPw = ''
           state.secureCodePw = ''
           state.hasResetPassword = 'true'
+          state.email = ''
 
           return
         }
