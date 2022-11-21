@@ -9,7 +9,6 @@ const Test = () => {
   const { message } = useSelector(store => store.auth)
   useEffect(() => {
     if (message) {
-      alert(message)
       dispatch(clearMessage())
     }
 

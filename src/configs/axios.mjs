@@ -24,6 +24,7 @@ authAxios.interceptors.request.use(
     Promise.reject(error)
   }
 )
+
 // Add a response interceptor
 authAxios.interceptors.response.use(
   res => {
@@ -33,8 +34,13 @@ authAxios.interceptors.response.use(
     const originalConfig = error.config
 
     if (originalConfig.url !== '/auth/sign-in' && error?.response) {
-      if (error.response.status === 401 && originalConfig._retry !== true) {
-        originalConfig._retry = true
+      const { code, message } = error.response.data
+
+      if (code === 403) return Promise.reject(error)
+
+      if (code === 401 && message === 'Expired token') {
+        return Promise.reject(error)
+      } else {
         try {
           const { refresh: rtFromLocalStorage } = loadState('refresh')
           const rs = await authAxios.post('/auth/refresh-token', {
@@ -50,8 +56,6 @@ authAxios.interceptors.response.use(
         } catch (_error) {
           return Promise.reject(_error)
         }
-      } else if (error.response.status === 403) {
-        return Promise.reject(error)
       }
     }
 

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import jwt_decode from "jwt-decode";
+import handleAuthAPI from '../../common/handleAuthAPI.js';
 
 import { authAxios } from '../../configs/axios.mjs'
 import { loadState, saveState } from '../../helpers/handleState'
@@ -358,19 +359,16 @@ export const authSlice = createSlice({
           return
         }
 
+        if (!handleAuthAPI(state, action.payload)) return
+
         const { code, message } = action.payload
-        if ([200, 201, 400, 401, 500].includes(code)) {
+
+        if ([200].includes(code)) {
           state.statusCode = code
           state.message = message
 
           return
-        } else if (code === 403) {
-          state.statusCode = code
-          state.message = 'There is some malicious action that affect your account. Please log out and re-authenticate again!'
-
-          return
         }
-
       })
 
       .addCase(findAccountAsync.pending, state => {
