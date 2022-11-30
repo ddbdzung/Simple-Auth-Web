@@ -94,7 +94,7 @@ function Header(props) {
         setNotifTitle('info')
         setStatusMessage('Email already sent. Please check your mailbox')
 
-      } else if (statusCode === 400 || statusCode === 403 || statusCode === 500) {
+      } else if ([400, 401, 403, 500].includes(statusCode)) {
         setNotifType(ERROR)
         setNotifTitle('error')
         setStatusMessage(message)

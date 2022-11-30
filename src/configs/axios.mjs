@@ -33,12 +33,12 @@ authAxios.interceptors.response.use(
   async error => {
     const originalConfig = error.config
 
-    if (originalConfig.url !== '/auth/sign-in' && error?.response) {
+    if (!['/auth/sign-in', '/auth/sign-out', '/auth/register'].includes(originalConfig.url) && error?.response) {
       const { code, message } = error.response.data
 
       if (code === 403) return Promise.reject(error)
 
-      if (code === 401 && message === 'Expired token') {
+      if (code === 401 && ['Expired token', 'Unauthorized'].includes(message)) {
         return Promise.reject(error)
       } else {
         try {
