@@ -117,7 +117,7 @@ function Header(props) {
           Username:
         </span>
         <h2>
-          {username}
+          {username === 'Simple Shop' ? undefined : username}
         </h2>
         <span className="text-blue-500">
           Email:

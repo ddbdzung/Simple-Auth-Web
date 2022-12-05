@@ -6,6 +6,10 @@ module.exports = {
     './src/index.html'
   ],
   theme: {
+    screens: {
+      'tablet': '992px',
+      'laptop': '1200px',
+    },
     extend: {
       spacing: {
         '40vh': '40vh'

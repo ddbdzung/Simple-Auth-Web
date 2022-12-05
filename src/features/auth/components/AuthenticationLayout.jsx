@@ -2,8 +2,6 @@ import PropTypes from 'prop-types';
 import { Outlet } from 'react-router-dom';
 
 import '../auth.css'
-import { ERROR } from '../../../constants'
-import Alert from '../../../shared/Alert'
 
 export default AuthenticationLayout;
 

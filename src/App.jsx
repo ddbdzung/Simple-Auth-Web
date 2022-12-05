@@ -12,12 +12,7 @@ import PrivateRoute from "./shared/PrivateRoute";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import ForbiddenPage from "./shared/ForbiddenPage";
-
-function Home() {
-  return (
-    <span className="inline-block mt-20" > Home page</span >
-  )
-}
+import PublicLayout from './features/public/publicLayout'
 
 function App() {
   const { username } = useSelector(store => store.auth)
@@ -40,19 +35,13 @@ function App() {
       <Routes>
         <Route path="/" element={<AppLayout />}>
           <Route index element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
+            <PublicLayout />
           } />
           <Route path="/game" element={
-            <PrivateRoute>
-              <Counter />
-            </PrivateRoute>
+            <Counter />
           } />
           <Route path="/test" element={
-            <PrivateRoute>
-              <Test />
-            </PrivateRoute>
+            <Test />
           } />
         </Route>
         <Route path="/auth/*" element={<AuthenticationRoute />} />
