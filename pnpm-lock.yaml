@@ -21,6 +21,7 @@ specifiers:
   autoprefixer: ^10.4.8
   axios: ^1.0.0
   babel-loader: ^8.2.5
+  cloudinary-react: ^1.8.1
   dotenv: ^16.0.3
   eslint: ^8.23.0
   eslint-config-airbnb: ^19.0.4
@@ -71,6 +72,7 @@ dependencies:
   '@fortawesome/react-fontawesome': 0.2.0_z27bm67dtmuyyvss23ckjdrcuy
   '@reduxjs/toolkit': 1.8.5_kuo2ie247izvzll3jejufdtq3q
   axios: 1.0.0
+  cloudinary-react: 1.8.1_zrp62gez7omnrwllyfdlincg3a
   dotenv: 16.0.3
   formik: 2.2.9_react@18.2.0
   jwt-decode: 3.1.2
@@ -2014,6 +2016,27 @@ packages:
       strip-ansi: 6.0.1
       wrap-ansi: 7.0.0
     dev: true
+
+  /cloudinary-core/2.13.0_lodash@4.17.21:
+    resolution: {integrity: sha512-Nt0Q5I2FtenmJghtC4YZ3MZZbGg1wLm84SsxcuVwZ83OyJqG9CNIGp86CiI6iDv3QobaqBUpOT7vg+HqY5HxEA==}
+    peerDependencies:
+      lodash: '>=4.0'
+    dependencies:
+      lodash: 4.17.21
+    dev: false
+
+  /cloudinary-react/1.8.1_zrp62gez7omnrwllyfdlincg3a:
+    resolution: {integrity: sha512-90LHbUPfB8Uj5tKY08+ladN8ONyfak8zjnlAgVc39vlxKCx3b9G0/+I5C1QQGDwBRqHKzxyXterfugbWUrCQhA==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16.3.3 || ^17.0.0 || ^18.0.0
+    dependencies:
+      cloudinary-core: 2.13.0_lodash@4.17.21
+      prop-types: 15.8.1
+      react: 18.2.0
+    transitivePeerDependencies:
+      - lodash
+    dev: false
 
   /co/4.6.0:
     resolution: {integrity: sha512-QVb0dM5HvG+uaxitm8wONl7jltx8dqhfU33DcqtOZcLSVIKSDDLDi7+0LbAKiyI8hD9u42m2YxXSkMGWThaecQ==}

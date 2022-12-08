@@ -4,16 +4,11 @@ import { Routes, Route } from "react-router-dom";
 
 import AuthenticationRoute from "./features/auth/components/AuthenticationRoute";
 import ErrorFallback from "./shared/ErrorBoundary";
-import AppLayout from "./shared/AppLayout";
-import Counter from "./features/game/Counter";
-import Test from "./shared/Test";
 // import PrivateRoute from "./shared/PrivateRoute";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import ForbiddenPage from "./shared/ForbiddenPage";
 import PublicRoute from "./features/public/PublicRoute";
-import { Navigate } from "react-router-dom";
-import PublicLayout from "./features/public/PublicLayout";
 import NotFoundPage from "./shared/NotFoundPage";
 
 function App() {
@@ -31,17 +26,20 @@ function App() {
     }
   })
   return (
-    <ErrorBoundary
-      FallbackComponent={ErrorFallback}
-      onReset={() => { window.location.reload(); }}>
-      <Routes>
-        <Route path="/*" element={<PublicRoute />} />
+    <>
+      <ErrorBoundary
+        FallbackComponent={ErrorFallback}
+        onReset={() => { window.location.reload(); }}>
+        <Routes>
+          <Route path="/*" element={<PublicRoute />} />
 
-        <Route path="/auth/*" element={<AuthenticationRoute />} />
-        <Route path="/forbidden" element={<ForbiddenPage />} />
-        <Route path="/404" element={<NotFoundPage />} />
-      </Routes>
-    </ErrorBoundary >
+          <Route path="/auth/*" element={<AuthenticationRoute />} />
+          <Route path="/admin/*" element={<AdminRoute />} />
+          <Route path="/forbidden" element={<ForbiddenPage />} />
+          <Route path="/404" element={<NotFoundPage />} />
+        </Routes>
+      </ErrorBoundary >
+    </>
   );
 }
 
