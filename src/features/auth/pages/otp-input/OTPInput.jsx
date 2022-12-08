@@ -81,17 +81,17 @@ export default function OTPInput() {
         }}
       >
         <Form className="bg-white rounded-md shadow-2xl p-5">
-          <h1 className="text-gray-800 font-bold text-2xl mb-1">Simple App</h1>
-          <p className="text-gray-600 uppercase text-md font-semibold">Enter security code</p>
+          <h1 className="text-gray-800 font-bold text-2xl mb-1">Simple Shop</h1>
+          <p className="text-gray-600 uppercase text-md font-semibold">Nhập mã bảo mật</p>
           <div className="flex flex-col my-4 gap-4">
             <span className="font-medium text-md">
-              Please check your emails for a message with your code. Your code is 6 numbers long.
+              Hãy kiểm tra email. Độ dài mã là 6 chữ số.
             </span>
             <div className="flex flex-row gap-4">
               <TextInput type="text" id="secureCode" name="secureCode" className="border-2 border-solid rounded-md py-2 text-2xl text-center w-1/2" />
               <div className="flex flex-col justify-between pl-2 w-1/2">
                 <div>
-                  We sent your code to:
+                  Chúng tôi đã gửi mã đến:
                 </div>
                 <div>
                   {hideMail(email)}
@@ -104,17 +104,17 @@ export default function OTPInput() {
             <div className="flex flex-row justify-between">
               <div className="w-2/5">
                 <Link to="/auth/recovery" className="inline-block mt-12 text-sm text-sky-400">
-                  Didn't get a code?
+                  Không nhận được mã?
                 </Link>
               </div>
               <div className="flex flex-row justify-end w-1/4">
                 <Link to="/auth/sign-in">
                   <button type="button" className="block basis-16 bg-slate-600 mt-5 mx-1 p-3 rounded-2xl hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2">
-                    Cancel
+                    Hủy
                   </button>
                 </Link>
                 <button type="submit" className="block w-full basis-16 bg-indigo-600 mt-5 mx-1 p-3 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2">
-                  Continue
+                  Tiếp tục
                 </button>
               </div>
             </div>
@@ -122,18 +122,18 @@ export default function OTPInput() {
             <div className="flex flex-row justify-between">
               <div className="w-2/5">
                 <Link to="/auth/recovery" className="inline-block mt-12 text-sm text-sky-400">
-                  Didn't get a code?
+                  Không nhận được mã?
                 </Link>
               </div>
               <div className="flex flex-row justify-end w-1/4">
                 <Link to="/auth/sign-in">
                   <button type="button" disabled className="block basis-16 bg-slate-600 mt-5 mx-1 p-3 rounded-2xl hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2">
-                    Cancel
+                    Hủy
                   </button>
                 </Link>
                 <button disabled type="submit" className="block w-full basis-16 bg-indigo-600 mt-5 mx-3 py-2 px-5 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2">
                   <div className="flex flex-row">
-                    <span className="mx-2">Loading</span>
+                    <span className="mx-2">Đang tải</span>
                     <div className="inline">
                       <svg role="status" className="inline w-4 h-4 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />

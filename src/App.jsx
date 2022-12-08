@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import ForbiddenPage from "./shared/ForbiddenPage";
 import PublicRoute from "./features/public/PublicRoute";
 import NotFoundPage from "./shared/NotFoundPage";
+import AdminRoute from "./features/admin/AdminRoute";
 
 function App() {
   const { username } = useSelector(store => store.auth)

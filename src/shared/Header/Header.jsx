@@ -113,7 +113,7 @@ function Header(_props) {
                 }
               </div>
               <div className="basis-2/3 tablet:basis-3/6 laptop:basis-[21.42%] flex">
-                <IconNavLink icon={faUser} description="Tài khoản" />
+                <IconNavLink linkTo="/auth/sign-in" icon={faUser} description="Tài khoản" />
                 <IconNavLink icon={faCartShopping} description="Giỏ hàng" />
               </div>
             </div>
