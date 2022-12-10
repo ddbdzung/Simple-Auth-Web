@@ -72,7 +72,6 @@ export default function Product() {
     if (selectedProducts.length === 1) {
       const { _id: id } = selectedProducts[0]
       dispatch(deleteProductAsync({ id: id }))
-      window.location.reload()
     }
   }
 
