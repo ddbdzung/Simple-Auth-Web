@@ -1,0 +1,5 @@
+export const GIGABYTE = 'GB'
+export const INCH = 'inch'
+export const MONTH = 'tháng'
+export const VIEW = 'lượt'
+export const MILIAMPEHOUR = 'mAh'

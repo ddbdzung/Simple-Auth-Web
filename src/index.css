@@ -3,6 +3,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    font-family: "Noto Sans", sans-serif;
+    color: black !important;
+  }
+  body {
+    position: relative;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   #App-logo {
     animation: App-logo-float infinite 3s ease-in-out;
@@ -20,3 +30,16 @@
     transform: translateY(0px);
   }
 }
+.webkitScroll::-webkit-scrollbar {
+  height: 4px;
+}
+.webkitScroll::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+.webkitScroll::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+.webkitScroll::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+

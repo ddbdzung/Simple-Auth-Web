@@ -4,20 +4,13 @@ import { Routes, Route } from "react-router-dom";
 
 import AuthenticationRoute from "./features/auth/components/AuthenticationRoute";
 import ErrorFallback from "./shared/ErrorBoundary";
-import AppLayout from "./shared/AppLayout";
-import Counter from "./features/game/Counter";
-import NotFoundPage from "./shared/NotFoundPage";
-import Test from "./shared/Test";
-import PrivateRoute from "./shared/PrivateRoute";
+// import PrivateRoute from "./shared/PrivateRoute";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import ForbiddenPage from "./shared/ForbiddenPage";
-
-function Home() {
-  return (
-    <span className="inline-block mt-20" > Home page</span >
-  )
-}
+import PublicRoute from "./features/public/PublicRoute";
+import NotFoundPage from "./shared/NotFoundPage";
+import AdminRoute from "./features/admin/AdminRoute";
 
 function App() {
   const { username } = useSelector(store => store.auth)
@@ -34,32 +27,20 @@ function App() {
     }
   })
   return (
-    <ErrorBoundary
-      FallbackComponent={ErrorFallback}
-      onReset={() => { window.location.reload(); }}>
-      <Routes>
-        <Route path="/" element={<AppLayout />}>
-          <Route index element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          } />
-          <Route path="/game" element={
-            <PrivateRoute>
-              <Counter />
-            </PrivateRoute>
-          } />
-          <Route path="/test" element={
-            <PrivateRoute>
-              <Test />
-            </PrivateRoute>
-          } />
-        </Route>
-        <Route path="/auth/*" element={<AuthenticationRoute />} />
-        <Route path="/*" element={<NotFoundPage />} />
-        <Route path="/forbidden" element={<ForbiddenPage />} />
-      </Routes>
-    </ErrorBoundary >
+    <>
+      <ErrorBoundary
+        FallbackComponent={ErrorFallback}
+        onReset={() => { window.location.reload(); }}>
+        <Routes>
+          <Route path="/*" element={<PublicRoute />} />
+
+          <Route path="/auth/*" element={<AuthenticationRoute />} />
+          <Route path="/admin/*" element={<AdminRoute />} />
+          <Route path="/forbidden" element={<ForbiddenPage />} />
+          <Route path="/404" element={<NotFoundPage />} />
+        </Routes>
+      </ErrorBoundary >
+    </>
   );
 }
 

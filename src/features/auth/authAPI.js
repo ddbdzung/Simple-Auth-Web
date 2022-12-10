@@ -46,6 +46,5 @@ export async function fetchSendValidateEmailAsync(tokens, _payload) {
 export async function fetchLogOutAsync(tokens, _payload) {
   const api = `/auth/sign-out`
 
-  // return customAxios.post(api, tokens, { refresh: tokens.refresh })
   return authAxios.post(api, { refresh: tokens.refresh })
 }

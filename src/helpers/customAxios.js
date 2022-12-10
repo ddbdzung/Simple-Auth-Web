@@ -2,13 +2,13 @@ import axios from 'axios'
 
 import * as URL from '../constants'
 
-const configHeaderRequest = ({ access, refresh }) => {
+const configHeaderRequest = (tokens) => {
   try {
-    if (!access || !refresh) {
+    if (!tokens?.access || !tokens?.refresh) {
       return {}
     }
     return {
-      Authorization: `Bearer ${access}`
+      Authorization: `Bearer ${access}`,
     }
   } catch (e) {
     console.error('config header request error')
@@ -16,8 +16,8 @@ const configHeaderRequest = ({ access, refresh }) => {
   }
 }
 
-const request = method => async (api, tokens, data) => {
-  const headers = configHeaderRequest(tokens)
+const request = method => async (api, tokens, data, _headers = {}) => {
+  const headers = _headers || configHeaderRequest(tokens)
   const body = {
     method,
     data,
