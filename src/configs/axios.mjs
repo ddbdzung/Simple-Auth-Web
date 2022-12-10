@@ -36,9 +36,9 @@ authAxios.interceptors.response.use(
     if (!['/auth/sign-in', '/auth/sign-out', '/auth/register'].includes(originalConfig.url) && error?.response) {
       const { code, message } = error.response.data
 
-      if (code === 403) return Promise.reject(error)
+      if ([403, 500, 400].includes(code)) return Promise.reject(error)
 
-      if (code === 401 && ['Expired token', 'Unauthorized'].includes(message)) {
+      if (code === 401 && ['Expired token', 'Unauthorized', 'Detected malicious token'].includes(message)) {
         return Promise.reject(error)
       } else {
         try {

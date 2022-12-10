@@ -360,7 +360,6 @@ export const authSlice = createSlice({
         }
 
         if (!handleAuthAPI(state, action.payload)) return
-        console.log('still here')
 
         const { code, message } = action.payload
 

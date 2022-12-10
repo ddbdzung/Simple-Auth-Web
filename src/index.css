@@ -6,6 +6,7 @@
 @layer base {
   html {
     font-family: "Noto Sans", sans-serif;
+    color: black !important;
   }
   body {
     position: relative;

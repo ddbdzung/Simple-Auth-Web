@@ -1,38 +1,30 @@
-import { useState } from "react"
-
-import Sub1 from '../assets/images/products/sub-default-1.jpg'
-import Sub2 from '../assets/images/products/sub-default-2.jpg'
-import Sub3 from '../assets/images/products/sub-default-3.jpg'
-import Sub4 from '../assets/images/products/sub-default-4.jpg'
-import Sub5 from '../assets/images/products/sub-default-5.jpg'
-import Sub6 from '../assets/images/products/sub-default-6.jpg'
-import Sub7 from '../assets/images/products/sub-default-7.jpg'
+import { Image } from "cloudinary-react"
+import { useEffect, useState } from "react"
 
 export default function Slider(props) {
-  // TODO in prod will uncomment
-  // const { subImg } = props
+  const { subImg } = props
   const [subImage, setSubImage] = useState(0)
-  const subImgs = [Sub1, Sub2, Sub3, Sub4, Sub5, Sub6, Sub7]
 
   return (
     <>
       {/* Carousel wrapper */}
       <div className="relative h-56 overflow-hidden rounded-lg tablet:w-1/3">
-        {subImgs.length > 0 && (<>
-          {subImgs.map((slideSrc, idx) => (
+        {subImg && subImg.length > 0 &&
+          subImg.map((slideSrc, idx) => (
             <div key={idx} className={`${(subImage === idx ? '' : 'hidden')} duration-700 ease-in-out`}>
-              <img
-                src={slideSrc}
+              <Image
                 className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                alt="..."
+                cloudName="dbbifu1w6"
+                publicId={slideSrc}
+                crop="scale"
               />
             </div>
           ))}
-        </>)}
+
         {/* Slider controls */}
         <button
           onClick={e => {
-            if (subImage < 0) { setSubImage(subImgs.length - 1) }
+            if (subImage < 0) { setSubImage(subImg.length - 1) }
             else {
               setSubImage(subImage - 1)
             }
@@ -62,7 +54,7 @@ export default function Slider(props) {
         </button>
         <button
           onClick={e => {
-            if (subImage === subImgs.length) { setSubImage(0) }
+            if (subImage === subImg.length) { setSubImage(0) }
             else {
               setSubImage(prev => prev + 1)
             }

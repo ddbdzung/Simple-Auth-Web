@@ -9,6 +9,7 @@ import { NavLink } from 'react-router-dom';
 import { API_ENTRY, BASE_DOMAIN, PRODUCT } from '../../constants/index'
 import IconButton from '../custom/IconButton';
 import IconNavLink from '../custom/IconNavLink';
+import logo from '../../assets/images/public/logo.png'
 
 export default Header;
 
@@ -22,8 +23,6 @@ function Header(_props) {
     if (!searchContent) return
 
     const queryString = `?search=${encodeURIComponent(searchContent)}`
-
-    const data = await axios.get(`${BASE_DOMAIN}${API_ENTRY}${PRODUCT.BASE}${PRODUCT.SEARCH}${queryString}`)
   }
 
   return (
@@ -39,10 +38,10 @@ function Header(_props) {
           // throttleWrapper(values, actions, dispatch)
         }}
       >
-        <div className="bg-blue-400 h-11 w-auto tablet:h-16 tablet:w-[970px] laptop:h-16 laptop:w-[1170px] tablet:px-4 tablet:mx-auto">
-          <div className="bg-yellow-500 flex h-full tablet:gap-32 laptop:gap-8">
+        <div className="h-11 w-auto tablet:h-16 tablet:w-[970px] laptop:h-16 laptop:w-[1170px] tablet:px-4 tablet:mx-auto">
+          <div className="flex h-full tablet:gap-32 laptop:gap-8">
             {/* Menu */}
-            <div className="basis-[14.29%] tablet:basis-[9.09%] laptop:hidden bg-slate-400">
+            <div className="basis-[14.29%] tablet:basis-[9.09%] laptop:hidden bg-slate-200">
               <IconButton icon={faBars} handleClick={() => setIsOpeningMenuBars(!isOpeningMenuBars)} />
             </div>
             {/* Menu slides out */}
@@ -69,12 +68,14 @@ function Header(_props) {
             {/* Logo */}
             <div className="basis-[57.14%] tablet:basis-[36.36%] laptop:basis-[22.22%] bg-green-500">
               <div className="w-full h-full border-2">
-                {/* TODO Logo image goes here */}
+                <NavLink to="/">
+                  <img className="w-full h-full" src={logo} alt="logo" />
+                </NavLink>
               </div>
             </div>
             {/* Actions */}
-            <div className="bg-slate-600 flex basis-[28.57%] tablet:basis-[54.55%] laptop:basis-[77.78%] tablet:justify-between laptop:gap-8">
-              <div className="bg-yellow-200 hidden laptop:flex laptop:basis-[71.42%] laptop:justify-center laptop:items-center">
+            <div className="flex basis-[28.57%] tablet:basis-[54.55%] laptop:basis-[77.78%] tablet:justify-between laptop:gap-8">
+              <div className="hidden laptop:flex laptop:basis-[71.42%] laptop:justify-center laptop:items-center">
                 <ul className="px-6 w-full h-full flex justify-end items-center">
                   <li className="h-full">
                     <NavLink to="" className="flex items-center px-2 h-full">Điện thoại</NavLink>

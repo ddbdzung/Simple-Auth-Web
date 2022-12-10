@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 export default function Brand() {
   return (
-    <div className="mb-2 px-2 flex py-4 gap-4 max-w-full bg-pink-300">
+    <div className="mb-2 px-2 flex py-4 gap-4 max-w-full bg-gray-200">
       <div className="flex justify-center items-center">
         <span className="cursor-default">Hãng</span>
       </div>

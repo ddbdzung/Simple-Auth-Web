@@ -54,6 +54,7 @@ module.exports = {
     },
   },
   plugins: [
+    // require('daisyui'),
     // eslint-disable-next-line global-require
     require('@tailwindcss/forms'),
     // add custom variant for expanding sidebar

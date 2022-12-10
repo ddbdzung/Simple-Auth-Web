@@ -1,13 +1,34 @@
 import { useEffect, useState } from 'react';
-
+import { v4 as uuidv4 } from 'uuid'
 import Sidebar from './partials/Sidebar';
 import Header from './partials/Header';
 import { Outlet, useLocation } from 'react-router-dom';
 
 import './css/style.css';
+import Alert from '../../shared/Alert';
+import { clearMessage } from '../auth/authSlice';
+import { INFO } from '../../constants';
+import { useDispatch, useSelector } from 'react-redux';
 
 function AdminLayout() {
   const location = useLocation();
+  const dispatch = useDispatch()
+  const { message } = useSelector(store => store.admin)
+  const [errorMessage, setErrorMessage] = useState(message)
+
+  useEffect(() => {
+    if (message) {
+      setErrorMessage(prev => {
+        return message
+      })
+    }
+
+    return () => {
+      if (message) {
+        dispatch(clearMessage())
+      }
+    }
+  })
 
   useEffect(() => {
     document.querySelector('html').style.scrollBehavior = 'auto'
@@ -18,7 +39,13 @@ function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div id="body_admin" className="font-inter antialiased bg-slate-100 text-slate-600">
+    <div id="body_admin" className="font-inter antialiased bg-slate-100 text-slate-600 relative">
+      {errorMessage && (
+        <div className="absolute top-16 right-16 z-10 max-w-lg bg-transparent">
+          <Alert type={INFO} title='Info' contents={errorMessage} id={uuidv4()} />
+        </div>
+      )}
+
       <div className="flex h-screen overflow-hidden">
 
         {/* Sidebar */}

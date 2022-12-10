@@ -1,10 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Transition from '../../utils/Transition';
+import { useDispatch } from 'react-redux';
 
 import UserAvatar from '../../images/user-avatar-32.png';
+import { logOutAsync } from '../../../auth/authSlice';
 
 function UserMenu() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -81,8 +85,12 @@ function UserMenu() {
             <li>
               <Link
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
-                to="/"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
+                to=""
+                onClick={() => {
+                  setDropdownOpen(!dropdownOpen)
+                  dispatch(logOutAsync())
+                  navigate('/auth/sign-in')
+                }}
               >
                 Đăng xuất
               </Link>
