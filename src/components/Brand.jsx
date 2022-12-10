@@ -8,18 +8,8 @@ export default function Brand() {
       </div>
       <ul className="flex gap-4 w-full overflow-auto webkitScroll">
         <li className="inline-block">
-          <NavLink to="" className="hover:text-red-700 active:text-red-800">
+          <NavLink to="/" className="hover:text-red-700 active:text-red-800">
             Apple
-          </NavLink>
-        </li>
-        <li className="inline-block">
-          <NavLink to="" className="hover:text-red-700 active:text-red-800">
-            Samsung
-          </NavLink>
-        </li>
-        <li className="inline-block">
-          <NavLink to="" className="hover:text-red-700 active:text-red-800">
-            Nokia
           </NavLink>
         </li>
       </ul>

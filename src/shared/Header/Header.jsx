@@ -10,6 +10,7 @@ import { API_ENTRY, BASE_DOMAIN, PRODUCT } from '../../constants/index'
 import IconButton from '../custom/IconButton';
 import IconNavLink from '../custom/IconNavLink';
 import logo from '../../assets/images/public/logo.png'
+import { loadState } from '../../helpers/handleState';
 
 export default Header;
 
@@ -114,7 +115,10 @@ function Header(_props) {
                 }
               </div>
               <div className="basis-2/3 tablet:basis-3/6 laptop:basis-[21.42%] flex">
-                <IconNavLink linkTo="/auth/sign-in" icon={faUser} description="Tài khoản" />
+                {loadState('role') && loadState('role')?.role !== 'admin'
+                  ? <IconNavLink linkTo="/auth/sign-in" icon={faUser} description="Tài khoản" />
+                  : <IconNavLink linkTo="/admin" icon={faUser} description="Admin" />
+                }
                 <IconNavLink icon={faCartShopping} description="Giỏ hàng" />
               </div>
             </div>
