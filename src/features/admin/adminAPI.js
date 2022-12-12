@@ -17,7 +17,6 @@ export async function fetchUpdateProductAsync(payload) {
 }
 
 export async function fetchDeleteProductAsync(payload) {
-  console.log(payload)
   const api = `${API.PRODUCT.BASE}/${API.PRODUCT.DELETE_PRODUCT}${payload.id}`
   return authAxios.delete(api, payload)
 }

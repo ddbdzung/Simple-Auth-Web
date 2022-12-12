@@ -32,28 +32,36 @@ authAxios.interceptors.response.use(
   },
   async error => {
     const originalConfig = error.config
+    // console.log(error)
 
     if (!['/auth/sign-in', '/auth/sign-out', '/auth/register'].includes(originalConfig.url) && error?.response) {
       const { code, message } = error.response.data
 
       if ([403, 500, 400].includes(code)) return Promise.reject(error)
 
-      if (code === 401 && ['Expired token', 'Unauthorized', 'Detected malicious token'].includes(message)) {
+      if (code === 401 && ['Expired token', 'Detected malicious token'].includes(message)) {
         return Promise.reject(error)
-      } else {
+      } else if (code === 401 && !originalConfig?.sent) {
+        originalConfig.sent = true
         try {
           const { refresh: rtFromLocalStorage } = loadState('refresh')
           const rs = await authAxios.post('/auth/refresh-token', {
             refresh: rtFromLocalStorage,
           })
 
-          authAxios.interceptors.response.eject()
           const { data: { access, refresh } } = rs.data
           saveState('access', access.token)
           saveState('refresh', refresh.token)
+          originalConfig.headers["Authorization"] = `Bearer ${access.token}`
 
-          return authAxios(originalConfig)
+          return authAxios({
+            ...originalConfig,
+            ...{
+              headers: originalConfig.headers.toJSON(),
+            }
+          })
         } catch (_error) {
+          // console.log(_error)
           return Promise.reject(_error)
         }
       }

@@ -181,9 +181,11 @@ export default function ProductUpdate() {
               <label htmlFor="warranty">Bảo hành (tháng)</label>
               <TextInput2 type="text" id="warranty" name="warranty" />
             </div>
+          </div >
+          <div className="tablet:ml-60 gap-4 my-4 tablet:grid tablet:grid-cols-3">
             <div>
               <SelectOption label="Hãng sản xuất" id="brandId" name="brandId">
-                <option value="">Chọn hãng sản xuất</option>
+                <option className="p-2" value="">Chọn hãng sản xuất</option>
                 {brands && brands.map((brand, idx) => (
                   <option key={idx} value={brand._id}>{brand.name}</option>
                 ))}
@@ -191,21 +193,17 @@ export default function ProductUpdate() {
             </div>
             <div>
               <SelectOption label="Danh mục hàng" id="catalogId" name="catalogId">
-                <option value="">Chọn danh mục hàng</option>
+                <option className="p-2" value="">Chọn danh mục hàng</option>
                 {catalogues && catalogues.map((catalog, idx) => (
-                  <option key={idx} value={catalog._id}>{catalog.name}</option>
+                  <option className="p-2" key={idx} value={catalog._id}>{catalog.name}</option>
                 ))}
               </SelectOption>
             </div>
-          </div >
+          </div>
           <div className="tablet:ml-60 font-semibold my-4">
             Thông số
           </div>
           <div className="tablet:ml-60 gap-4 tablet:grid tablet:grid-cols-3">
-            <div>
-              <label htmlFor="view">Lượt xem</label>
-              <TextInput2 type="text" id="view" name="view" />
-            </div>
             <div>
               <label htmlFor="ram">RAM (GB)</label>
               <TextInput2 type="text" id="ram" name="ram" />

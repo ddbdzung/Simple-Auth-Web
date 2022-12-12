@@ -1,12 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
+import { differenceBy } from 'lodash';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import DataTable from 'react-data-table-component'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import formatCurrencyVND from '../../../helpers/formatCurrencyVND.js';
+import { loadState } from '../../../helpers/handleState.js';
 
 import Loading from '../../../shared/Loading/index.jsx';
-import { deleteProductAsync, getProductsAsync } from '../adminSlice.js';
+import { afterDeletedProduct, deleteProductAsync, getProductsAsync } from '../adminSlice.js';
 import CRUD from '../partials/actions/CRUD.jsx';
 
 const columns = [
@@ -42,16 +44,32 @@ const columns = [
   },
 ];
 
+const paginationComponentOptions = {
+  rowsPerPageText: 'Số bản ghi trong 1 page',
+  rangeSeparatorText: 'đến',
+  selectAllRowsItem: true,
+  selectAllRowsItemText: 'Todos',
+};
+
 export default function Product() {
-  const { products, formStatus } = useSelector(store => store.admin)
+  const { products, isDeletedProduct } = useSelector(store => store.admin)
   const [selectedProducts, setSelectedProducts] = useState([])
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   useEffect(() => {
-    dispatch(getProductsAsync({}))
-  }, [])
+    return () => {
+      if (isDeletedProduct === true) {
+        dispatch(afterDeletedProduct())
+      }
+    }
+  }, [isDeletedProduct])
 
+  useEffect(() => {
+    dispatch(getProductsAsync({}))
+
+  }, [])
 
   const handleViewDetail = () => {
     if (selectedProducts.length === 1) {
@@ -68,16 +86,29 @@ export default function Product() {
       navigate(`/admin/product/${id}/e`)
     }
   }
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     if (selectedProducts.length === 1) {
       const { _id: id } = selectedProducts[0]
-      dispatch(deleteProductAsync({ id: id }))
+      const willDelete = window.confirm('Bạn có chắc muốn xóa chứ?')
+      if (!willDelete) return
+
+      const products = loadState('adProducts').adProducts
+      if (!products) {
+        return
+      }
+
+      if (products.findIndex(item => item._id === id) === -1) {
+        return
+      }
+
+      dispatch(deleteProductAsync({ id }))
     }
-  }
+  })
 
   const handleChange = useCallback(({ selectedRows }) => {
     setSelectedProducts(selectedRows)
   })
+
   return (
     <div className="tablet:ml-60">
       {/* Navigation */}
@@ -93,11 +124,17 @@ export default function Product() {
         <Loading />
         :
         <DataTable
+          tilte={'Quản lý sản phẩm'}
+
           columns={columns}
           data={products}
           selectableRows
+          selectableRowsSingle
           onSelectedRowsChange={handleChange}
-          progressPending={(formStatus === 'ready') ? false : true}
+
+          pagination
+          paginationComponentOptions={paginationComponentOptions}
+
         />
       }
       {/* CRUD Buttons */}

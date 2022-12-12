@@ -571,6 +571,7 @@ export const authSlice = createSlice({
           localStorage.removeItem('email')
           localStorage.removeItem('id')
           localStorage.removeItem('role')
+          localStorage.removeItem('adProducts')
 
           return
         }

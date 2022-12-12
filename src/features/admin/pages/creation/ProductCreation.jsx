@@ -1,23 +1,37 @@
-import ModalImage from "react-modal-image";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import throttle from 'lodash.throttle'
-import { useEffect, useState } from "react"
-import { NavLink, useParams } from "react-router-dom"
+import { useEffect, useRef, useState } from "react"
+import { NavLink } from "react-router-dom"
 import * as Yup from 'yup'
 import { Formik, Form } from "formik";
 
 import { authAxios } from "../../../../configs/axios.mjs"
 import { API } from "../../../../constants/index.js"
 import TextInput2 from "../../../../shared/custom/TextInput2.jsx";
-import { createProductAsync } from "../../adminSlice.js";
+import { createProductAsync, afterCreatedProduct } from "../../adminSlice.js";
 import SelectOption from "../../../../shared/custom/SelectOption.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductCreation() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { isCreatedProduct } = useSelector(store => store.admin)
   const [previewImage, setPreviewImage] = useState(null)
   const [previewImageList, setPreviewImageList] = useState([])
   const [catalogues, setCatalogues] = useState([])
   const [brands, setBrands] = useState([])
+
+  useEffect(() => {
+    if (isCreatedProduct === true) {
+      navigate('/admin/product')
+    }
+
+    return () => {
+      if (isCreatedProduct === true) {
+        dispatch(afterCreatedProduct())
+      }
+    }
+  }, [isCreatedProduct])
 
   const getCatalogues = async (mounted) => {
     try {
@@ -159,9 +173,11 @@ export default function ProductCreation() {
               <label htmlFor="warranty">Bảo hành (tháng)</label>
               <TextInput2 type="text" id="warranty" name="warranty" />
             </div>
+          </div >
+          <div className="tablet:ml-60 gap-4 my-4 tablet:grid tablet:grid-cols-3">
             <div>
               <SelectOption label="Hãng sản xuất" id="brandId" name="brandId">
-                <option value="">Chọn hãng sản xuất</option>
+                <option className="p-2" value="">Chọn hãng sản xuất</option>
                 {brands && brands.map((brand, idx) => (
                   <option key={idx} value={brand._id}>{brand.name}</option>
                 ))}
@@ -169,21 +185,17 @@ export default function ProductCreation() {
             </div>
             <div>
               <SelectOption label="Danh mục hàng" id="catalogId" name="catalogId">
-                <option value="">Chọn danh mục hàng</option>
+                <option className="p-2" value="">Chọn danh mục hàng</option>
                 {catalogues && catalogues.map((catalog, idx) => (
-                  <option key={idx} value={catalog._id}>{catalog.name}</option>
+                  <option className="p-2" key={idx} value={catalog._id}>{catalog.name}</option>
                 ))}
               </SelectOption>
             </div>
-          </div >
+          </div>
           <div className="tablet:ml-60 font-semibold my-4">
             Thông số
           </div>
           <div className="tablet:ml-60 gap-4 tablet:grid tablet:grid-cols-3">
-            <div>
-              <label htmlFor="view">Lượt xem</label>
-              <TextInput2 type="text" id="view" name="view" />
-            </div>
             <div>
               <label htmlFor="ram">RAM (GB)</label>
               <TextInput2 type="text" id="ram" name="ram" />
@@ -240,6 +252,7 @@ export default function ProductCreation() {
           <div className="tablet:ml-60">
             <div>
               <input
+                id="priImg"
                 type="file"
                 onChange={handleSetPreview}
               />
@@ -248,7 +261,10 @@ export default function ProductCreation() {
               <div>
                 <img alt="not found" width={"250px"} src={previewImage} />
                 <br />
-                <button className="bg-black text-white font-bold p-2" onClick={() => setPreviewImage(null)}>Remove</button>
+                <button className="bg-black text-white font-bold p-2" onClick={() => {
+                  document.getElementById('priImg').value = null
+                  setPreviewImage(null)
+                }}>Remove</button>
               </div>
             )}
           </div>

@@ -13,8 +13,9 @@ const initialState = {
   statusCode: '',
   message: '',
   isDeletedProduct: false,
+  isCreatedProduct: false,
 
-  products: [],
+  products: loadState('adProducts')?.adProducts ?? [],
 }
 
 export const getProductsAsync = createAsyncThunk(
@@ -94,18 +95,24 @@ export const adminSlice = createSlice({
   initialState,
   // ! Reducers here
   reducers: {
+    afterCreatedProduct: state => {
+      state.isCreatedProduct = false
+    },
+    afterDeletedProduct: state => {
+      state.isDeletedProduct = false
+    },
+    clearMessage: state => {
+      state.message = ''
+    },
   },
   // ! Extra Reducers here
   extraReducers: builder => {
     builder
       .addCase(getProductsAsync.pending, (state, action) => {
-        state.formStatus = 'loading'
       })
       .addCase(getProductsAsync.rejected, (state, action) => {
-        state.formStatus = 'ready'
       })
       .addCase(getProductsAsync.fulfilled, (state, action) => {
-        state.formStatus = 'ready'
         if (action?.payload?.code === 'ERR_NETWORK') {
           state.message = action.payload.message
 
@@ -118,16 +125,15 @@ export const adminSlice = createSlice({
 
         if ([200].includes(code)) {
           state.products = data
+          saveState('adProducts', data)
 
           return
         }
       })
 
       .addCase(createProductAsync.pending, (state, action) => {
-        state.formStatus = 'ready'
       })
       .addCase(createProductAsync.rejected, (state, action) => {
-        state.formStatus = 'ready'
       })
       .addCase(createProductAsync.fulfilled, (state, action) => {
         if (action?.payload?.code === 'ERR_NETWORK') {
@@ -142,16 +148,16 @@ export const adminSlice = createSlice({
 
         if ([200].includes(code)) {
           state.message = message
+          state.isCreatedProduct = true
+          state.products = [...loadState('adProducts').adProducts, data]
 
           return
         }
       })
 
       .addCase(updateProductAsync.pending, (state, action) => {
-        state.formStatus = 'ready'
       })
       .addCase(updateProductAsync.rejected, (state, action) => {
-        state.formStatus = 'ready'
       })
       .addCase(updateProductAsync.fulfilled, (state, action) => {
         if (action?.payload?.code === 'ERR_NETWORK') {
@@ -172,10 +178,8 @@ export const adminSlice = createSlice({
       })
 
       .addCase(deleteProductAsync.pending, (state, action) => {
-        state.formStatus = 'ready'
       })
       .addCase(deleteProductAsync.rejected, (state, action) => {
-        state.formStatus = 'ready'
       })
       .addCase(deleteProductAsync.fulfilled, (state, action) => {
         if (action?.payload?.code === 'ERR_NETWORK') {
@@ -189,7 +193,12 @@ export const adminSlice = createSlice({
         const { code, message, data } = action.payload
 
         if ([200].includes(code)) {
+          state.isDeletedProduct = true
           state.message = message
+          const currProducts = loadState('adProducts').adProducts
+          const updatedProducts = currProducts.filter(item => item._id !== data._id)
+          state.products = updatedProducts
+          saveState('adProducts', updatedProducts)
 
           return
         }
@@ -198,6 +207,9 @@ export const adminSlice = createSlice({
 })
 
 export const {
+  afterCreatedProduct,
+  afterDeletedProduct,
+  clearMessage,
 } = adminSlice.actions
 
 export default adminSlice.reducer

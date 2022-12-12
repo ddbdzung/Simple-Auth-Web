@@ -6,7 +6,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 
 import './css/style.css';
 import Alert from '../../shared/Alert';
-import { clearMessage } from '../auth/authSlice';
+import { clearMessage } from './adminSlice';
 import { INFO } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -26,6 +26,7 @@ function AdminLayout() {
     return () => {
       if (message) {
         dispatch(clearMessage())
+        setErrorMessage('')
       }
     }
   })

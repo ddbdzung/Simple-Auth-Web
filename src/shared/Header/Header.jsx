@@ -6,7 +6,7 @@ import { Formik } from 'formik';
 import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
 
-import { API, API_ENTRY, BASE_DOMAIN, PRODUCT } from '../../constants/index'
+import { API, PRODUCT } from '../../constants/index'
 import IconButton from '../custom/IconButton';
 import IconNavLink from '../custom/IconNavLink';
 import logo from '../../assets/images/public/logo.png'
@@ -41,10 +41,10 @@ function Header(_props) {
 
   const handleSearching = async (e) => {
     e.preventDefault()
-    console.log(searchContent)
     if (!searchContent) return
 
     const queryString = `?search=${encodeURIComponent(searchContent)}`
+    console.log(queryString)
   }
 
   return (
@@ -72,8 +72,8 @@ function Header(_props) {
             <div className={`${!isOpeningMenuBars ? '-translate-x-full' : 'translate-x-0'} right-1/4 transition-transform ease-in duration-500 fixed top-0 bottom-0 left-0 z-10 bg-slate-100`}>
               {/* Menu list goes here */}
               <ul className="bg-slate-200 my-4 mx-2 p-8">
-                {catalogues && catalogues.map(item => (
-                  <li className="inline-block w-full bg-pink-200 mb-8 last:mb-0">
+                {catalogues && catalogues.map((item, idx) => (
+                  <li key={idx} className="inline-block w-full bg-pink-200 mb-8 last:mb-0">
                     <NavLink className="w-full h-full bg-blue-200 flex items-center py-1" to="">
                       {item?.name}
                     </NavLink>
@@ -97,8 +97,8 @@ function Header(_props) {
             <div className="flex basis-[28.57%] tablet:basis-[54.55%] laptop:basis-[77.78%] tablet:justify-between laptop:gap-8">
               <div className="hidden laptop:flex laptop:basis-[71.42%] laptop:justify-center laptop:items-center">
                 <ul className="px-6 w-full h-full flex justify-end items-center">
-                  {catalogues && catalogues.map(item => (
-                    <li className="h-full">
+                  {catalogues && catalogues.map((item, idx) => (
+                    <li key={idx} className="h-full">
                       <NavLink to="" className="flex items-center px-2 h-full">
                         {item?.name}
                       </NavLink>
