@@ -8,30 +8,30 @@ import { Formik, Form } from "formik";
 import { authAxios } from "../../../../configs/axios.mjs"
 import { API } from "../../../../constants/index.js"
 import TextInput2 from "../../../../shared/custom/TextInput2.jsx";
-import { createProductAsync, afterCreatedProduct } from "../../adminSlice.js";
+import { createProductAsync, afterCreatedItem } from "../../adminSlice.js";
 import SelectOption from "../../../../shared/custom/SelectOption.jsx";
 import { useNavigate } from "react-router-dom";
 
 export default function ProductCreation() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { isCreatedProduct } = useSelector(store => store.admin)
+  const { isCreatedItem } = useSelector(store => store.admin)
   const [previewImage, setPreviewImage] = useState(null)
   const [previewImageList, setPreviewImageList] = useState([])
   const [catalogues, setCatalogues] = useState([])
   const [brands, setBrands] = useState([])
 
   useEffect(() => {
-    if (isCreatedProduct === true) {
+    if (isCreatedItem === true) {
       navigate('/admin/product')
     }
 
     return () => {
-      if (isCreatedProduct === true) {
-        dispatch(afterCreatedProduct())
+      if (isCreatedItem === true) {
+        dispatch(afterCreatedItem())
       }
     }
-  }, [isCreatedProduct])
+  }, [isCreatedItem])
 
   const getCatalogues = async (mounted) => {
     try {
@@ -111,10 +111,10 @@ export default function ProductCreation() {
       <Formik
         initialValues={{
           name: '',
-          price: '',
-          warranty: '',
-          discount: '',
-          quantity: '',
+          price: 1,
+          warranty: 1,
+          discount: 0,
+          quantity: 0,
 
           'description': '',
           'ram': '',
@@ -133,16 +133,33 @@ export default function ProductCreation() {
         validationSchema={Yup.object({
           name: Yup.string()
             .required('Required'),
-          price: Yup.string()
+          price: Yup.number()
+            .min(1)
             .required('Required'),
-          warranty: Yup.string()
+          warranty: Yup.number()
+            .min(1)
             .required('Required'),
-          discount: Yup.string()
+          discount: Yup.number()
+            .min(0)
+            .max(100)
             .required('Required'),
-          quantity: Yup.string()
+          quantity: Yup.number()
+            .min(0)
             .required('Required'),
           brandId: Yup.string().required('Required'),
           catalogId: Yup.string().required('Required'),
+
+          description: Yup.string().max(5000),
+          ram: Yup.number().min(1),
+          rom: Yup.number().min(8),
+          battery: Yup.number().min(1),
+          screensize: Yup.number().min(4),
+          screenType: Yup.string(),
+          color: Yup.string(),
+          cpu: Yup.string(),
+          gpu: Yup.string(),
+          release: Yup.date(),
+          bonus: Yup.string(),
         })}
         onSubmit={(values, actions) => {
           throttleWrapper(values, actions, dispatch)

@@ -69,7 +69,7 @@ export default function ResetPassword() {
     <>
       {errorMessage && (
         <div className="absolute top-3 left-3 z-10 max-w-lg bg-transparent">
-          <Alert type={notifType} title={notifTitle} contents={errorMessage} id={uuidv4()} />
+          <Alert type={(errorMessage === 'OK') ? SUCCESS : ERROR} title={(errorMessage === 'OK') ? '' : 'error'} contents={errorMessage} id={uuidv4()} />
         </div>
       )}
       <Formik

@@ -7,7 +7,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import './css/style.css';
 import Alert from '../../shared/Alert';
 import { clearMessage } from './adminSlice';
-import { INFO } from '../../constants';
+import { SUCCESS, ERROR } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 
 function AdminLayout() {
@@ -25,8 +25,8 @@ function AdminLayout() {
 
     return () => {
       if (message) {
+        setTimeout(() => { setErrorMessage('') }, 1500)
         dispatch(clearMessage())
-        setErrorMessage('')
       }
     }
   })
@@ -42,8 +42,8 @@ function AdminLayout() {
   return (
     <div id="body_admin" className="font-inter antialiased bg-slate-100 text-slate-600 relative">
       {errorMessage && (
-        <div className="absolute top-16 right-16 z-10 max-w-lg bg-transparent">
-          <Alert type={INFO} title='Info' contents={errorMessage} id={uuidv4()} />
+        <div className="absolute top-3 left-3 z-50 max-w-lg bg-transparent">
+          <Alert type={(errorMessage === 'OK') ? SUCCESS : ERROR} title={(errorMessage === 'OK') ? '' : 'error'} contents={errorMessage} id={uuidv4()} />
         </div>
       )}
 

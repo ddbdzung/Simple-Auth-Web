@@ -68,7 +68,7 @@ export default function FindAccount() {
     <>
       {errorMessage && (
         <div className="absolute top-3 left-3 z-10 max-w-lg bg-transparent">
-          <Alert type={ERROR} title='Error' contents={errorMessage} id={uuidv4()} />
+          <Alert type={(errorMessage === 'OK') ? SUCCESS : ERROR} title={(errorMessage === 'OK') ? '' : 'error'} contents={errorMessage} id={uuidv4()} />
         </div>
       )}
       <Formik

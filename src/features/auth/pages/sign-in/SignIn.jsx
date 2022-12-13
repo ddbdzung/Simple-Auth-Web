@@ -4,7 +4,6 @@ import throttle from 'lodash.throttle'
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 
-
 import TextInput from '../../../../shared/custom/TextInput'
 import { Link } from 'react-router-dom'
 import {
@@ -12,7 +11,7 @@ import {
   signInAsync,
   clearResetPasswordEntry,
 } from '../../authSlice'
-import { ERROR } from '../../../../constants'
+import { ERROR, SUCCESS } from '../../../../constants'
 import { useState, useEffect } from 'react'
 import Alert from '../../../../shared/Alert'
 
@@ -50,6 +49,7 @@ export default function SignIn() {
     return () => {
       if (message) {
         dispatch(clearMessage())
+        setErrorMessage('')
       }
     }
   })
@@ -57,7 +57,7 @@ export default function SignIn() {
     <>
       {errorMessage && (
         <div className="absolute top-3 left-3 z-10 max-w-lg bg-transparent">
-          <Alert type={ERROR} title='Error' contents={errorMessage} id={uuidv4()} />
+          <Alert type={(errorMessage === 'OK') ? SUCCESS : ERROR} title={(errorMessage === 'OK') ? '' : 'error'} contents={errorMessage} id={uuidv4()} />
         </div>
       )}
       <Formik

@@ -74,14 +74,14 @@ export default function ProductDetail() {
           <label htmlFor="brand">Hãng sản xuất</label>
           <input type="text" id="brand"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            value={product?.brandId.name || ''}
+            value={product?.brandId?.name || ''}
             disabled />
         </div>
         <div>
           <label htmlFor="catalog">Danh mục hàng</label>
           <input type="text" id="catalog"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            value={product?.catalogId.name || ''}
+            value={product?.catalogId?.name || ''}
             disabled />
         </div>
       </div >
@@ -196,8 +196,8 @@ export default function ProductDetail() {
         Ảnh phụ
       </div>
       <div className="tablet:ml-60 gap-2 tablet:grid tablet:grid-cols-3">
-        {product?.imageList.length > 0 &&
-          product.imageList.map((imageLink, idx) => (
+        {product?.imageList?.length > 0 &&
+          product?.imageList.map((imageLink, idx) => (
             <div key={idx}>
               <ModalImage
                 small={`https://res.cloudinary.com/dbbifu1w6/image/upload/c_scale/v1/${imageLink || ''}`}

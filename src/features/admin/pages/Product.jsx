@@ -1,5 +1,4 @@
-import { differenceBy } from 'lodash';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +7,7 @@ import formatCurrencyVND from '../../../helpers/formatCurrencyVND.js';
 import { loadState } from '../../../helpers/handleState.js';
 
 import Loading from '../../../shared/Loading/index.jsx';
-import { afterDeletedProduct, deleteProductAsync, getProductsAsync } from '../adminSlice.js';
+import { deleteProductAsync, getProductsAsync } from '../adminSlice.js';
 import CRUD from '../partials/actions/CRUD.jsx';
 
 const columns = [
@@ -34,12 +33,12 @@ const columns = [
   },
   {
     name: 'Hãng sản xuất',
-    selector: row => row.brandId.name,
+    selector: row => row.brandId?.name,
     sortable: true,
   },
   {
     name: 'Danh mục',
-    selector: row => row.catalogId.name,
+    selector: row => row.catalogId?.name,
     sortable: true,
   },
 ];
@@ -52,19 +51,11 @@ const paginationComponentOptions = {
 };
 
 export default function Product() {
-  const { products, isDeletedProduct } = useSelector(store => store.admin)
+  const { products } = useSelector(store => store.admin)
   const [selectedProducts, setSelectedProducts] = useState([])
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
-  useEffect(() => {
-    return () => {
-      if (isDeletedProduct === true) {
-        dispatch(afterDeletedProduct())
-      }
-    }
-  }, [isDeletedProduct])
 
   useEffect(() => {
     dispatch(getProductsAsync({}))
@@ -119,6 +110,7 @@ export default function Product() {
           <NavLink to="/admin/product">Sản phẩm</NavLink>
         </span>
       </div>
+      <h1 className="text-center text-lg font-bold pb-2">Quản lý sản phẩm</h1>
       {(products.length <= 0)
         ?
         <Loading />

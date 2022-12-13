@@ -11,9 +11,17 @@ export const PRODUCT = {
 export const BRAND = {
   BASE: '/brand',
   GET_BRANDS: '',
+  GET_BRAND: '',
+  CREATE_BRAND: '',
+  UPDATE_BRAND: '',
+  DELETE_BRAND: '',
 }
 
 export const CATALOG = {
   BASE: '/catalog',
   GET_CATALOGUES: '',
+  GET_CATALOG: '',
+  CREATE_CATALOG: '',
+  UPDATE_CATALOG: '',
+  DELETE_CATALOG: '',
 }

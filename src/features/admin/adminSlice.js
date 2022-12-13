@@ -3,19 +3,28 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import handleAuthAPI from '../../common/handleAuthAPI'
 import { loadState, saveState } from '../../helpers/handleState'
 import {
+  fetchCreateBrandAsync,
+  fetchCreateCatalogAsync,
   fetchCreateProductAsync,
+  fetchDeleteBrandAsync,
+  fetchDeleteCatalogAsync,
   fetchDeleteProductAsync,
+  fetchGetBrandsAsync,
+  fetchGetCataloguesAsync,
   fetchGetProductsAsync,
+  fetchUpdateBrandAsync,
   fetchUpdateProductAsync,
+  fetchUpdateCatalogAsync,
 } from './adminAPI'
 
 const initialState = {
   statusCode: '',
   message: '',
-  isDeletedProduct: false,
-  isCreatedProduct: false,
+  isCreatedItem: false,
 
   products: loadState('adProducts')?.adProducts ?? [],
+  brands: loadState('adBrands')?.adBrands ?? [],
+  catalogues: loadState('adCatalogues')?.adCatalogues ?? [],
 }
 
 export const getProductsAsync = createAsyncThunk(
@@ -23,6 +32,41 @@ export const getProductsAsync = createAsyncThunk(
   async (payload) => {
     try {
       const { data } = await fetchGetProductsAsync(payload)
+
+      return data
+    } catch (errorResponse) {
+      const { code, message } = errorResponse
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return { code, message }
+      }
+
+      return errorResponse.response.data
+    }
+  }
+)
+export const getBrandsAsync = createAsyncThunk(
+  'auth/fetchGetBrandsAsync',
+  async (payload) => {
+    try {
+      const { data } = await fetchGetBrandsAsync(payload)
+
+      return data
+    } catch (errorResponse) {
+      const { code, message } = errorResponse
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return { code, message }
+      }
+
+      return errorResponse.response.data
+    }
+  }
+)
+
+export const getCataloguesAsync = createAsyncThunk(
+  'auth/fetchGetCataloguesAsync',
+  async (payload) => {
+    try {
+      const { data } = await fetchGetCataloguesAsync(payload)
 
       return data
     } catch (errorResponse) {
@@ -54,11 +98,83 @@ export const createProductAsync = createAsyncThunk(
   }
 )
 
+export const createBrandAsync = createAsyncThunk(
+  'auth/fetchCreateBrandAsync',
+  async (payload) => {
+    try {
+      const { data } = await fetchCreateBrandAsync(payload)
+
+      return data
+    } catch (errorResponse) {
+      const { code, message } = errorResponse
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return { code, message }
+      }
+
+      return errorResponse.response.data
+    }
+  }
+)
+
+export const createCatalogAsync = createAsyncThunk(
+  'auth/fetchCreateCatalogAsync',
+  async (payload) => {
+    try {
+      const { data } = await fetchCreateCatalogAsync(payload)
+
+      return data
+    } catch (errorResponse) {
+      const { code, message } = errorResponse
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return { code, message }
+      }
+
+      return errorResponse.response.data
+    }
+  }
+)
+
 export const updateProductAsync = createAsyncThunk(
   'auth/fetchUpdateProductAsync',
   async (payload) => {
     try {
       const { data } = await fetchUpdateProductAsync(payload)
+
+      return data
+    } catch (errorResponse) {
+      const { code, message } = errorResponse
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return { code, message }
+      }
+
+      return errorResponse.response.data
+    }
+  }
+)
+
+export const updateBrandAsync = createAsyncThunk(
+  'auth/fetchUpdateBrandAsync',
+  async (payload) => {
+    try {
+      const { data } = await fetchUpdateBrandAsync(payload)
+
+      return data
+    } catch (errorResponse) {
+      const { code, message } = errorResponse
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return { code, message }
+      }
+
+      return errorResponse.response.data
+    }
+  }
+)
+
+export const updateCatalogAsync = createAsyncThunk(
+  'auth/fetchUpdateCatalogAsync',
+  async (payload) => {
+    try {
+      const { data } = await fetchUpdateCatalogAsync(payload)
 
       return data
     } catch (errorResponse) {
@@ -89,17 +205,48 @@ export const deleteProductAsync = createAsyncThunk(
     }
   }
 )
+export const deleteBrandAsync = createAsyncThunk(
+  'auth/fetchDeleteBrandAsync',
+  async (payload) => {
+    try {
+      const { data } = await fetchDeleteBrandAsync(payload)
 
+      return data
+    } catch (errorResponse) {
+      const { code, message } = errorResponse
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return { code, message }
+      }
+
+      return errorResponse.response.data
+    }
+  }
+)
+
+export const deleteCatalogAsync = createAsyncThunk(
+  'auth/fetchDeleteCatalogAsync',
+  async (payload) => {
+    try {
+      const { data } = await fetchDeleteCatalogAsync(payload)
+
+      return data
+    } catch (errorResponse) {
+      const { code, message } = errorResponse
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return { code, message }
+      }
+
+      return errorResponse.response.data
+    }
+  }
+)
 export const adminSlice = createSlice({
   name: 'admin',
   initialState,
   // ! Reducers here
   reducers: {
-    afterCreatedProduct: state => {
-      state.isCreatedProduct = false
-    },
-    afterDeletedProduct: state => {
-      state.isDeletedProduct = false
+    afterCreatedItem: state => {
+      state.isCreatedItem = false
     },
     clearMessage: state => {
       state.message = ''
@@ -131,6 +278,52 @@ export const adminSlice = createSlice({
         }
       })
 
+      .addCase(getBrandsAsync.pending, (state, action) => {
+      })
+      .addCase(getBrandsAsync.rejected, (state, action) => {
+      })
+      .addCase(getBrandsAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+
+          return
+        }
+
+        if (!handleAuthAPI(state, action.payload)) return
+
+        const { code, data } = action.payload
+
+        if ([200].includes(code)) {
+          state.brands = data
+          saveState('adBrands', data)
+
+          return
+        }
+      })
+
+      .addCase(getCataloguesAsync.pending, (state, action) => {
+      })
+      .addCase(getCataloguesAsync.rejected, (state, action) => {
+      })
+      .addCase(getCataloguesAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+
+          return
+        }
+
+        if (!handleAuthAPI(state, action.payload)) return
+
+        const { code, data } = action.payload
+
+        if ([200].includes(code)) {
+          state.catalogues = data
+          saveState('adCatalogues', data)
+
+          return
+        }
+      })
+
       .addCase(createProductAsync.pending, (state, action) => {
       })
       .addCase(createProductAsync.rejected, (state, action) => {
@@ -145,11 +338,61 @@ export const adminSlice = createSlice({
         if (!handleAuthAPI(state, action.payload)) return
 
         const { code, message, data } = action.payload
+        const newData = [...loadState('adProducts').adProducts, data]
+
+        if ([200].includes(code)) {
+          saveState('adProducts', newData)
+          state.message = message
+          state.isCreatedItem = true
+          state.products = newData
+
+          return
+        }
+      })
+
+      .addCase(createBrandAsync.pending, (state, action) => {
+      })
+      .addCase(createBrandAsync.rejected, (state, action) => {
+      })
+      .addCase(createBrandAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+
+          return
+        }
+
+        if (!handleAuthAPI(state, action.payload)) return
+
+        const { code, message, data } = action.payload
 
         if ([200].includes(code)) {
           state.message = message
-          state.isCreatedProduct = true
-          state.products = [...loadState('adProducts').adProducts, data]
+          state.isCreatedItem = true
+          state.brands = [...loadState('adBrands').adBrands, data]
+
+          return
+        }
+      })
+
+      .addCase(createCatalogAsync.pending, (state, action) => {
+      })
+      .addCase(createCatalogAsync.rejected, (state, action) => {
+      })
+      .addCase(createCatalogAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+
+          return
+        }
+
+        if (!handleAuthAPI(state, action.payload)) return
+
+        const { code, message, data } = action.payload
+
+        if ([200].includes(code)) {
+          state.message = message
+          state.isCreatedItem = true
+          state.catalogues = [...loadState('adCatalogues').adCatalogues, data]
 
           return
         }
@@ -168,7 +411,51 @@ export const adminSlice = createSlice({
 
         if (!handleAuthAPI(state, action.payload)) return
 
-        const { code, message, data } = action.payload
+        const { code, message } = action.payload
+
+        if ([200].includes(code)) {
+          state.message = message
+
+          return
+        }
+      })
+
+      .addCase(updateBrandAsync.pending, (state, action) => {
+      })
+      .addCase(updateBrandAsync.rejected, (state, action) => {
+      })
+      .addCase(updateBrandAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+
+          return
+        }
+
+        if (!handleAuthAPI(state, action.payload)) return
+
+        const { code, message } = action.payload
+
+        if ([200].includes(code)) {
+          state.message = message
+
+          return
+        }
+      })
+
+      .addCase(updateCatalogAsync.pending, (state, action) => {
+      })
+      .addCase(updateCatalogAsync.rejected, (state, action) => {
+      })
+      .addCase(updateCatalogAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+
+          return
+        }
+
+        if (!handleAuthAPI(state, action.payload)) return
+
+        const { code, message } = action.payload
 
         if ([200].includes(code)) {
           state.message = message
@@ -193,7 +480,6 @@ export const adminSlice = createSlice({
         const { code, message, data } = action.payload
 
         if ([200].includes(code)) {
-          state.isDeletedProduct = true
           state.message = message
           const currProducts = loadState('adProducts').adProducts
           const updatedProducts = currProducts.filter(item => item._id !== data._id)
@@ -203,12 +489,63 @@ export const adminSlice = createSlice({
           return
         }
       })
+
+      .addCase(deleteBrandAsync.pending, (state, action) => {
+      })
+      .addCase(deleteBrandAsync.rejected, (state, action) => {
+      })
+      .addCase(deleteBrandAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+
+          return
+        }
+
+        if (!handleAuthAPI(state, action.payload)) return
+
+        const { code, message, data } = action.payload
+
+        if ([200].includes(code)) {
+          state.message = message
+          const currBrands = loadState('adBrands').adBrands
+          const updatedBrands = currBrands.filter(item => item._id !== data._id)
+          state.brands = updatedBrands
+          saveState('adBrands', updatedBrands)
+
+          return
+        }
+      })
+
+      .addCase(deleteCatalogAsync.pending, (state, action) => {
+      })
+      .addCase(deleteCatalogAsync.rejected, (state, action) => {
+      })
+      .addCase(deleteCatalogAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+
+          return
+        }
+
+        if (!handleAuthAPI(state, action.payload)) return
+
+        const { code, message, data } = action.payload
+
+        if ([200].includes(code)) {
+          state.message = message
+          const currCatalogues = loadState('adCatalogues').adCatalogues
+          const updatedCatalogues = currCatalogues.filter(item => item._id !== data._id)
+          state.catalogues = updatedCatalogues
+          saveState('adCatalogues', updatedCatalogues)
+
+          return
+        }
+      })
   }
 })
 
 export const {
-  afterCreatedProduct,
-  afterDeletedProduct,
+  afterCreatedItem,
   clearMessage,
 } = adminSlice.actions
 
