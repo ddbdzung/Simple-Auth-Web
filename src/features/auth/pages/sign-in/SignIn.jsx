@@ -49,7 +49,7 @@ export default function SignIn() {
     return () => {
       if (message) {
         dispatch(clearMessage())
-        setErrorMessage('')
+        setTimeout(() => setErrorMessage(''), 1500)
       }
     }
   })

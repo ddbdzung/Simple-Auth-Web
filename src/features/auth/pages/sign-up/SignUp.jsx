@@ -38,7 +38,7 @@ export default function SignUp() {
     return () => {
       if (message) {
         dispatch(clearMessage())
-        setErrorMessage('')
+        setTimeout(() => setErrorMessage(''), 1500)
       }
     }
   })
