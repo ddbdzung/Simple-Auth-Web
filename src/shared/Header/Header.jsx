@@ -1,25 +1,36 @@
 import { faUser } from '@fortawesome/free-regular-svg-icons'
 import * as Yup from 'yup'
-import axios from 'axios'
 import { faBars, faCartShopping, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { Formik } from 'formik';
 import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
+import jwt_decode from "jwt-decode"
 
-import { API, PRODUCT } from '../../constants/index'
+import { API } from '../../constants/index'
 import IconButton from '../custom/IconButton';
 import IconNavLink from '../custom/IconNavLink';
 import logo from '../../assets/images/public/logo.png'
 import { loadState } from '../../helpers/handleState';
 import { authAxios } from '../../configs/axios.mjs';
+import { useDispatch } from 'react-redux';
+import { logOutAsync } from '../../features/auth/authSlice'
+
 
 export default Header;
 
 function Header(_props) {
+  const tmpRole = loadState('role')?.role
+  const tmpAToken = loadState('access')?.access
+  const tmpRToken = loadState('refresh')?.refresh
+  const decoded = (tmpAToken) ? jwt_decode(tmpAToken) : null
+
   const [searchContent, setSearchContent] = useState('')
   const [isSearching, setIsSearching] = useState(false)
   const [isOpeningMenuBars, setIsOpeningMenuBars] = useState(false)
   const [catalogues, setCatalogues] = useState([])
+  const [toggleUserBar, setToggleUserBar] = useState(false)
+  const dispatch = useDispatch()
+
 
   const getCatalogues = async (mounted) => {
     try {
@@ -45,6 +56,10 @@ function Header(_props) {
 
     const queryString = `?search=${encodeURIComponent(searchContent)}`
     console.log(queryString)
+  }
+
+  const handleToggleUserBar = e => {
+    setToggleUserBar(!toggleUserBar)
   }
 
   return (
@@ -131,10 +146,35 @@ function Header(_props) {
                   </div>
                 }
               </div>
-              <div className="basis-2/3 tablet:basis-3/6 laptop:basis-[21.42%] flex">
-                {loadState('role') && loadState('role')?.role !== 'admin'
-                  ? <IconNavLink linkTo="/auth/sign-in" icon={faUser} description="Tài khoản" />
-                  : <IconNavLink linkTo="/admin" icon={faUser} description="Admin" />
+              <div className="relative basis-2/3 tablet:basis-3/6 laptop:basis-[21.42%] flex">
+                {(tmpRole && tmpRole === 'admin' && tmpRole === decoded.role)
+                  ? <IconNavLink linkTo="/admin" icon={faUser} description="Admin" />
+                  : (
+                    <>
+                      {loadState('access')?.access && loadState('refresh')?.refresh
+                        ?
+                        (
+                          <>
+                            <IconNavLink onClickEvent={handleToggleUserBar} icon={faUser} description="Tài khoản" />
+                            {/* Menu cấp 2 */}
+                            <div className={`absolute z-10 top-full left-0 w-fit ${toggleUserBar ? 'block' : 'hidden'}`}>
+                              <div className="flex flex-col gap-1 bg-white/70">
+                                <NavLink to="" className="hover:bg-slate-300 cursor-pointer px-2">Hồ sơ</NavLink>
+                                <NavLink to="" onClick={e => dispatch(logOutAsync())} className="hover:bg-slate-300 cursor-pointer px-2">Đăng xuất</NavLink>
+                              </div>
+                            </div>
+                          </>
+                        )
+                        :
+                        (
+                          <>
+                            <IconNavLink linkTo="/auth/sign-in" icon={faUser} description="Tài khoản" />
+                          </>
+                        )
+
+                      }
+                    </>
+                  )
                 }
                 <IconNavLink linkTo="/cart" icon={faCartShopping} description="Giỏ hàng" />
               </div>

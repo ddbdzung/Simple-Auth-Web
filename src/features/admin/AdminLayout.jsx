@@ -18,9 +18,7 @@ function AdminLayout() {
 
   useEffect(() => {
     if (message) {
-      setErrorMessage(prev => {
-        return message
-      })
+      setErrorMessage(message)
     }
 
     return () => {

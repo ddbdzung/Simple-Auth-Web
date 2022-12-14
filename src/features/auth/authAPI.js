@@ -1,5 +1,6 @@
 import { authAxios } from '../../configs/axios.mjs'
 import { customAxios } from '../../helpers/customAxios'
+import { loadState } from '../../helpers/handleState.js'
 
 export async function fetchSignUp(token, payload) {
   const api = `/auth/register`
@@ -45,6 +46,7 @@ export async function fetchSendValidateEmailAsync(tokens, _payload) {
 
 export async function fetchLogOutAsync(tokens, _payload) {
   const api = `/auth/sign-out`
+  const refresh = tokens.refresh ?? loadState('refresh')?.refresh
 
-  return authAxios.post(api, { refresh: tokens.refresh })
+  return authAxios.post(api, { refresh })
 }

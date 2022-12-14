@@ -13,7 +13,7 @@ export const authAxios = axios.create({
 // Add a request interceptor
 authAxios.interceptors.request.use(
   config => {
-    const { access } = loadState('access')
+    const access = loadState('access')?.access
     if (access) {
       config.headers['Authorization'] = 'Bearer ' + access
     }
@@ -32,9 +32,9 @@ authAxios.interceptors.response.use(
   },
   async error => {
     const originalConfig = error.config
-    // console.log(error)
+    console.log(originalConfig)
 
-    if (!['/auth/sign-in', '/auth/sign-out', '/auth/register'].includes(originalConfig.url) && error?.response) {
+    if (!['/auth/sign-in', '/auth/sign-out', '/auth/register'].includes(originalConfig?.url) && error?.response) {
       const { code, message } = error.response.data
 
       if ([403, 500, 400].includes(code)) return Promise.reject(error)

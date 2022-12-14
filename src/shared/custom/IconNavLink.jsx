@@ -7,13 +7,15 @@ IconNavLink.propTypes = {
   linkTo: PropTypes.string,
   description: PropTypes.string,
   containerStyle: PropTypes.string,
+  onClickEvent: PropTypes.func,
 }
 
 function IconNavLink(props) {
-  const { containerStyle, description, linkTo, ...iconProps } = props
+  const { onClickEvent, containerStyle, description, linkTo, ...iconProps } = props
+  const clickEvent = (onClickEvent) ? onClickEvent : (e) => { }
 
   return (
-    <div className={`w-full h-full ${containerStyle ?? ''}`}>
+    <div onClick={e => clickEvent()} className={`w-full h-full ${containerStyle ?? ''}`}>
       <NavLink to={linkTo ?? ''} className="w-full h-full flex flex-col justify-center items-center">
         {/* Icon goes here */}
         <div className="w-fit h-fit p-0.5">

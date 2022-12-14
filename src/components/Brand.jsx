@@ -7,9 +7,9 @@ export default function Brand() {
   const [brandList, setBrandList] = useState([])
   const getBrands = async (mounted) => {
     try {
-      const { data } = await authAxios.get(`${API.BRAND.BASE}/${API.BRAND.GET_BRANDS}`)
+      const data = await authAxios.get(`${API.BRAND.BASE}/${API.BRAND.GET_BRANDS}`)
       if (mounted) {
-        setBrandList(data.data)
+        setBrandList(data.data.data)
       }
     } catch (err) {
       console.log(err)
