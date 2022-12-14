@@ -36,14 +36,14 @@ export default function ProductList(_props) {
               <Image
                 className="w-full h-full"
                 cloudName="dbbifu1w6"
-                publicId={item.imageLink}
+                publicId={item?.imageLink}
                 crop="scale"
               />
             </div>
             <div className="flex flex-col flex-wrap gap-3">
-              <div className="text-black text-md font-bold">{item.name}</div>
-              <div className="text-red-600 text-sm font-bold">{formatCurrencyVND(item.price)}</div>
-              <button onClick={e => { navigate(`/products/${item._id}`) }}
+              <div className="text-black text-md font-bold">{item?.name}</div>
+              <div className="text-red-600 text-sm font-bold">{formatCurrencyVND(item?.price)}</div>
+              <button onClick={e => { navigate(`/products/${item?._id}`) }}
                 className="block mx-6 py-1 rounded-md text-white uppercase bg-slate-900">
                 Mua
               </button>

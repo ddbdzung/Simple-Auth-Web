@@ -5,7 +5,7 @@ import Header from "../../shared/Header/Header";
 
 export default function PublicLayout(_props) {
   return (
-    <div className="min-h-screen bg-white w-auto tablet:w-[970px] laptop:w-[1170px] tablet:px-4 tablet:mx-auto">
+    <div className="min-h-screen relative pb-[5.75rem] bg-white w-auto tablet:w-[970px] laptop:w-[1170px] tablet:px-4 tablet:mx-auto">
       <Header />
       <Outlet />
       <Footer phoneNumber='0584637490' />

@@ -2,7 +2,6 @@ import { Image } from 'cloudinary-react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import DefaultProduct from '../../assets/images/products/default.png'
 import Slider from '../../components/Slider'
 import { authAxios } from '../../configs/axios.mjs'
 import { API, GIGABYTE, INCH, MILIAMPEHOUR, MONTH, VIEW } from '../../constants'

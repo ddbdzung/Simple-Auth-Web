@@ -136,7 +136,7 @@ function Header(_props) {
                   ? <IconNavLink linkTo="/auth/sign-in" icon={faUser} description="Tài khoản" />
                   : <IconNavLink linkTo="/admin" icon={faUser} description="Admin" />
                 }
-                <IconNavLink icon={faCartShopping} description="Giỏ hàng" />
+                <IconNavLink linkTo="/cart" icon={faCartShopping} description="Giỏ hàng" />
               </div>
             </div>
           </div>

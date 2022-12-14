@@ -13,7 +13,7 @@ export default function Footer(props) {
   const { phoneNumber } = props
 
   return (
-    <footer className="bg-black flex px-4 tablet:px-8 py-2 tablet:py-4 text-white font-medium justify-between">
+    <footer className="absolute w-full bottom-0 h-[5.75rem] bg-black flex px-4 tablet:px-8 py-2 tablet:py-4 text-white font-medium justify-between">
       <div className="flex flex-col justify-between">
         <span>Hỗ trợ & Bán hàng 24/7</span>
         <div className="flex flex-row justify-start gap-4">
