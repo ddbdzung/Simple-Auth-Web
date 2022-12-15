@@ -11,7 +11,7 @@ export default function ProductDetail() {
   const [product, setProduct] = useState()
   useEffect(() => {
     let mounted = true
-    authAxios.get(`${API.PRODUCT.BASE}/${API.PRODUCT.GET_PRODUCT}/${id}`)
+    authAxios.get(`${API.PRODUCT.BASE}/${API.ADMIN}/${API.PRODUCT.GET_PRODUCT}${id}`)
       .then(({ data }) => {
         if (mounted) {
           setProduct(data.data)

@@ -47,7 +47,7 @@ export default function ProductUpdate() {
 
   const getProduct = async (mounted) => {
     try {
-      const { data } = await authAxios.get(`${API.PRODUCT.BASE}/${API.PRODUCT.GET_PRODUCT}/${id}`)
+      const { data } = await authAxios.get(`${API.PRODUCT.BASE}/${API.ADMIN}${API.PRODUCT.GET_PRODUCT}/${id}`)
       if (mounted) {
         setProduct(data.data)
         setPreviewImage(data.data.imageLink)

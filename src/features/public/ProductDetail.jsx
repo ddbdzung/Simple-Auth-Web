@@ -1,21 +1,31 @@
 import { Image } from 'cloudinary-react'
 import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 import Slider from '../../components/Slider'
 import { authAxios } from '../../configs/axios.mjs'
 import { API, GIGABYTE, INCH, MILIAMPEHOUR, MONTH, VIEW } from '../../constants'
 import formatCurrencyVND from '../../helpers/formatCurrencyVND'
+import { addToCart, decreaseItemInCart } from './publicSlice'
 
 const checkQuantityStatus = qty => (qty === 0) ? 'Hết hàng' : 'Còn hàng'
 
 export default function ProductDetail(_props) {
   const [product, setProduct] = useState(null)
   const { id } = useParams()
+  const dispatch = useDispatch()
+  const { cart } = useSelector(store => store.public)
+
+  useEffect(() => {
+    return () => {
+      // console.log(cart)
+    }
+  }, [cart])
 
   useEffect(() => {
     let mounted = true
-    authAxios.get(`${API.PRODUCT.BASE}/${API.PRODUCT.GET_PRODUCT}/${id}`)
+    authAxios.get(`${API.PRODUCT.BASE}/${API.CLIENT}${API.PRODUCT.GET_PRODUCT}/${id}`)
       .then(({ data }) => {
         if (mounted) {
           setProduct(data.data)
@@ -25,6 +35,21 @@ export default function ProductDetail(_props) {
     return () => mounted = false
   }, [])
 
+  const handleAddCart = (_event) => {
+    if (!product) return
+
+    if (!id) return
+
+    dispatch(addToCart({ id }))
+  }
+
+  const handleBuy = (event) => {
+    if (!product) return
+
+    if (!id) return
+
+    dispatch(decreaseItemInCart({ id }))
+  }
 
   return (
     <>
@@ -151,10 +176,10 @@ export default function ProductDetail(_props) {
         </div>
 
         <div className="tablet:flex justify-center items-center hidden">
-          <button type="button" className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+          <button onClick={e => handleAddCart(e)} type="button" className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
             Thêm vào giỏ hàng
           </button>
-          <button type="button" className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+          <button onClick={e => handleBuy(e)} type="button" className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
             Mua ngay
           </button>
         </div>
@@ -254,10 +279,10 @@ export default function ProductDetail(_props) {
         </div>
 
         <div className="flex justify-center items-center tablet:hidden">
-          <button type="button" className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+          <button onClick={e => handleAddCart(e)} type="button" className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
             Thêm vào giỏ hàng
           </button>
-          <button type="button" className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+          <button onClick={e => handleBuy(e)} type="button" className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
             Mua ngay
           </button>
         </div>

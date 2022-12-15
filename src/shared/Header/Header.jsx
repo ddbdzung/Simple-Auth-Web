@@ -83,8 +83,8 @@ function Header(_props) {
             </div>
             {/* Menu slides out */}
             {isOpeningMenuBars &&
-              <div onClick={() => setIsOpeningMenuBars(!isOpeningMenuBars)} className="absolute top-0 bottom-0 left-0 right-0 bg-[#2d2d2da6]" />}
-            <div className={`${!isOpeningMenuBars ? '-translate-x-full' : 'translate-x-0'} right-1/4 transition-transform ease-in duration-500 fixed top-0 bottom-0 left-0 z-10 bg-slate-100`}>
+              <div onClick={() => setIsOpeningMenuBars(!isOpeningMenuBars)} className="absolute z-40 top-0 bottom-0 left-0 right-0 bg-[#2d2d2da6]" />}
+            <div className={`${!isOpeningMenuBars ? '-translate-x-full' : 'translate-x-0'} right-1/4 transition-transform ease-in duration-500 fixed z-50 top-0 bottom-0 left-0 bg-slate-100`}>
               {/* Menu list goes here */}
               <ul className="bg-slate-200 my-4 mx-2 p-8">
                 {catalogues && catalogues.map((item, idx) => (

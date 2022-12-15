@@ -32,7 +32,6 @@ authAxios.interceptors.response.use(
   },
   async error => {
     const originalConfig = error.config
-    console.log(originalConfig)
 
     if (!['/auth/sign-in', '/auth/sign-out', '/auth/register'].includes(originalConfig?.url) && error?.response) {
       const { code, message } = error.response.data

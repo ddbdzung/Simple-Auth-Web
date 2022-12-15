@@ -2,7 +2,7 @@ import { authAxios } from "../../configs/axios.mjs"
 import { API } from "../../constants/index.js"
 
 export async function fetchGetProductsAsync(_payload) {
-  const api = `${API.PRODUCT.BASE}/${API.PRODUCT.GET_PRODUCTS}`
+  const api = `${API.PRODUCT.BASE}/${API.ADMIN}/${API.PRODUCT.GET_PRODUCTS}`
 
   return authAxios.get(api)
 }
@@ -18,7 +18,7 @@ export async function fetchGetCataloguesAsync(_payload) {
 }
 
 export async function fetchCreateProductAsync(payload) {
-  const api = `${API.PRODUCT.BASE}/${API.PRODUCT.CREATE_PRODUCT}`
+  const api = `${API.PRODUCT.BASE}/${API.ADMIN}/${API.PRODUCT.CREATE_PRODUCT}`
 
   return authAxios.post(api, payload)
 }
@@ -35,7 +35,7 @@ export async function fetchCreateCatalogAsync(payload) {
 }
 
 export async function fetchUpdateProductAsync(payload) {
-  const api = `${API.PRODUCT.BASE}/${API.PRODUCT.UPDATE_PRODUCT}${payload.id}`
+  const api = `${API.PRODUCT.BASE}/${API.ADMIN}/${API.PRODUCT.UPDATE_PRODUCT}${payload.id}`
   return authAxios.patch(api, payload)
 }
 
@@ -49,7 +49,7 @@ export async function fetchUpdateCatalogAsync(payload) {
 }
 
 export async function fetchDeleteProductAsync(payload) {
-  const api = `${API.PRODUCT.BASE}/${API.PRODUCT.DELETE_PRODUCT}${payload.id}`
+  const api = `${API.PRODUCT.BASE}/${API.ADMIN}/${API.PRODUCT.DELETE_PRODUCT}${payload.id}`
   return authAxios.delete(api, payload)
 }
 
