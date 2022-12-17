@@ -9,6 +9,7 @@ export const PRODUCT = {
   CREATE_PRODUCT: '',
   UPDATE_PRODUCT: '',
   DELETE_PRODUCT: '',
+  CHECK_PRODUCT_ORDER_CONDITION: 'check'
 }
 
 export const BRAND = {

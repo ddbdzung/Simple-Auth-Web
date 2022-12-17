@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid'
+import { ToastContainer } from 'react-toastify';
 
 import { SUCCESS } from "../../constants";
 import Alert from "../../shared/Alert";
@@ -28,14 +29,21 @@ export default function PublicLayout(_props) {
     }
 
     if (message) {
-      setTimeout(() => {
-        dispatch(clearMessage())
-      }, 300)
+      if (message === 'Đã thanh toán thành công, vui lòng kiểm tra hòm thư email') {
+        setTimeout(() => {
+          dispatch(clearMessage())
+        }, 3000)
+      } else {
+        setTimeout(() => {
+          dispatch(clearMessage())
+        }, 300)
+      }
     }
   })
 
   return (
-    <div className="min-h-screen relative pb-[5.75rem] bg-white w-auto tablet:w-[970px] laptop:w-[1170px] tablet:px-4 tablet:mx-auto">
+    <div className="min-h-screen relative pb-[5.75rem] bg-slate-200 w-auto tablet:w-[970px] laptop:w-[1170px] tablet:px-4 tablet:mx-auto">
+      <ToastContainer />
       {statusCode && (
         <div className="absolute top-3 left-3 z-50 max-w-lg bg-transparent">
           <Alert type={SUCCESS} title={'Success'} contents={authConstants[statusCode]} id={uuidv4()} />

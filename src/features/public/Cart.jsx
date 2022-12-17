@@ -3,6 +3,8 @@ import _ from "lodash";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Brand from "../../components/Brand";
 import { API, GIGABYTE, MILIAMPEHOUR } from "../../constants";
@@ -18,7 +20,67 @@ export default function Cart() {
   const idList = useMemo(() => {
     return cart.map(item => item.id)
   }, [cart])
+
+  const [pro, setPro] = useState([])
+  useEffect(() => {
+    let mounted = true
+    if (mounted) {
+      if (pro?.length > 0) {
+        pro?.forEach(item => {
+          toast.warn(`Sản phẩm ${item.name} không đủ số lượng để thanh toán`, {
+            position: toast.POSITION.TOP_RIGHT
+          })
+        })
+      }
+    }
+
+    return () => mounted = false
+  }, [pro])
   const [cartList, setCartList] = useState()
+
+  const checkoutCondition = useCallback((mounted) => {
+    return setTimeout(() => {
+      if (cart?.length > 0) {
+        if (mounted) {
+          customAxios.post(`${API.PRODUCT.BASE}/${API.CLIENT}/${API.PRODUCT.CHECK_PRODUCT_ORDER_CONDITION}`,
+            {},
+            { cart }
+          )
+            .then(({ data }) => {
+              if (mounted) {
+                const response = data?.data
+                if (!response) return
+
+                const notEnoughQtyProducts = response.reduce((prev, curr) => {
+                  if (!curr.isEnoughAmount) {
+                    return [curr, ...prev]
+                  } else {
+                    return prev
+                  }
+
+                }, [])
+
+                setPro(notEnoughQtyProducts)
+              }
+            })
+        }
+      }
+    }, 3000)
+  }, [cart])
+  useEffect(() => {
+    let mounted = true
+    let timerCheckoutCondition
+    if (mounted) {
+      timerCheckoutCondition = checkoutCondition(mounted)
+    }
+
+    return () => {
+      mounted = false
+      if (timerCheckoutCondition) {
+        clearTimeout(timerCheckoutCondition)
+      }
+    }
+  }, [cart])
 
   const mapAmountToCartList = useCallback((cart, cartList) => cartList?.map(item => {
     const { amount } = _.find(cart, i => i.id === item._id)
@@ -96,7 +158,7 @@ export default function Cart() {
       <div className="mt-4">
         <div className="clear-both border-2 overflow-auto h-[27rem]">
           <table className="text-center">
-            <thead className="border-b-2">
+            <thead className="border-b-2 border-slate-300">
               <tr>
                 <th className="tablet:min-w-[2rem] px-2">STT</th>
                 <th className="tablet:min-w-[8rem]">Ảnh</th>
@@ -243,12 +305,23 @@ export default function Cart() {
         </div>
       </div>
 
-      <div className="flex flex-row-reverse mt-2">
+      <div className="flex flex-row-reverse my-2 gap-4">
         <div className="inline-flex items-center justify-center btn bg-[#007bff] hover:bg-[#0069d9] hover:border-[#dae0e5] hover:cursor-pointer">
-          <NavLink to="/" className="text-white font-semibold" href="#">
+          <NavLink to="/" className="text-white font-semibold">
             Tiếp tục mua sắm
           </NavLink>
         </div>
+        {cartList && cartList?.length > 0 && (pro && pro?.length === 0)
+          ?
+          <div className="inline-flex items-center justify-center btn bg-[#007bff] hover:bg-[#0069d9] hover:border-[#dae0e5] hover:cursor-pointer">
+            <NavLink to="/checkout" className="text-white font-semibold">
+              Thanh toán
+            </NavLink>
+          </div>
+          :
+          <>
+          </>
+        }
       </div>
     </>
   )

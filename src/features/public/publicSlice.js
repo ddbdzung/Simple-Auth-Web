@@ -3,7 +3,7 @@ import _ from 'lodash'
 
 import { loadState, saveState } from '../../helpers/handleState'
 import {
-  // fetchGetProductsAsync,
+  fetchCheckoutAsync,
 } from './publicAPI'
 
 const initialState = {
@@ -13,23 +13,23 @@ const initialState = {
   cart: loadState('cart')?.cart ?? [],
 }
 
-// export const getProductsAsync = createAsyncThunk(
-//   'auth/fetchGetProductsAsync',
-//   async (payload) => {
-//     try {
-//       const { data } = await fetchGetProductsAsync(payload)
+export const checkoutAsync = createAsyncThunk(
+  'auth/fetchCheckoutAsync',
+  async (payload) => {
+    try {
+      const { data } = await fetchCheckoutAsync({}, payload)
 
-//       return data
-//     } catch (errorResponse) {
-//       const { code, message } = errorResponse
-//       if (errorResponse.code === 'ERR_NETWORK') {
-//         return { code, message }
-//       }
+      return data
+    } catch (errorResponse) {
+      const { code, message } = errorResponse
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return { code, message }
+      }
 
-//       return errorResponse.response.data
-//     }
-//   }
-// )
+      return errorResponse.response.data
+    }
+  }
+)
 export const publicSlice = createSlice({
   name: 'public',
   initialState,
@@ -110,28 +110,23 @@ export const publicSlice = createSlice({
   // ! Extra Reducers here
   extraReducers: builder => {
     builder
-    // .addCase(getProductsAsync.pending, (state, action) => {
-    // })
-    // .addCase(getProductsAsync.rejected, (state, action) => {
-    // })
-    // .addCase(getProductsAsync.fulfilled, (state, action) => {
-    //   if (action?.payload?.code === 'ERR_NETWORK') {
-    //     state.message = action.payload.message
+      .addCase(checkoutAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
 
-    //     return
-    //   }
+          return
+        }
 
-    //   if (!handleAuthAPI(state, action.payload)) return
+        const { code, message, _data } = action.payload
 
-    //   const { code, data } = action.payload
+        if ([201].includes(code)) {
+          state.statusCode = 201
+          state.message = message
+          state.cart = []
 
-    //   if ([200].includes(code)) {
-    //     state.products = data
-    //     saveState('adProducts', data)
-
-    //     return
-    //   }
-    // })
+          return
+        }
+      })
   }
 })
 

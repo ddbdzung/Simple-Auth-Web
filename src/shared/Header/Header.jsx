@@ -88,8 +88,8 @@ function Header(_props) {
               {/* Menu list goes here */}
               <ul className="bg-slate-200 my-4 mx-2 p-8">
                 {catalogues && catalogues.map((item, idx) => (
-                  <li key={idx} className="inline-block w-full bg-pink-200 mb-8 last:mb-0">
-                    <NavLink className="w-full h-full bg-blue-200 flex items-center py-1" to="">
+                  <li key={idx} className="inline-block w-full mb-8 last:mb-0">
+                    <NavLink className="w-full h-full flex items-center py-1  font-semibold text-slate-700" to="">
                       {item?.name}
                     </NavLink>
                   </li>
@@ -114,7 +114,7 @@ function Header(_props) {
                 <ul className="px-6 w-full h-full flex justify-end items-center">
                   {catalogues && catalogues.map((item, idx) => (
                     <li key={idx} className="h-full">
-                      <NavLink to="" className="flex items-center px-2 h-full">
+                      <NavLink to="" className="flex items-center px-2 h-full font-semibold text-slate-700">
                         {item?.name}
                       </NavLink>
                     </li>

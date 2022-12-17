@@ -58,6 +58,7 @@ specifiers:
   react-redux: ^8.0.4
   react-router-dom: ^6.3.0
   react-test-renderer: ^18.2.0
+  react-toastify: ^9.1.1
   react-transition-group: ^4.4.2
   sass: ^1.54.5
   styled-components: ^5.3.6
@@ -102,6 +103,7 @@ dependencies:
   react-modal-image: 2.6.0
   react-redux: 8.0.4_biqbaboplfbrettd7655fr4n2y
   react-router-dom: 6.3.0_biqbaboplfbrettd7655fr4n2y
+  react-toastify: 9.1.1_biqbaboplfbrettd7655fr4n2y
   react-transition-group: 4.4.5_biqbaboplfbrettd7655fr4n2y
   sass: 1.54.5
   styled-components: 5.3.6_7i5myeigehqah43i5u7wbekgba
@@ -2117,6 +2119,11 @@ packages:
       react: 18.2.0
     transitivePeerDependencies:
       - lodash
+    dev: false
+
+  /clsx/1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
     dev: false
 
   /co/4.6.0:
@@ -5109,6 +5116,17 @@ packages:
       react-shallow-renderer: 16.15.0_react@18.2.0
       scheduler: 0.23.0
     dev: true
+
+  /react-toastify/9.1.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-pkFCla1z3ve045qvjEmn2xOJOy4ZciwRXm1oMPULVkELi5aJdHCN/FHnuqXq8IwGDLB7PPk2/J6uP9D8ejuiRw==}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      clsx: 1.2.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
 
   /react-transition-group/4.4.5_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==}

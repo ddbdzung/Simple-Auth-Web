@@ -25,9 +25,9 @@ export default function Brand() {
   }, [])
 
   return (
-    <div className="mb-2 px-2 flex py-4 gap-4 max-w-full bg-gray-200">
+    <div className="mb-2 px-2 flex py-4 gap-4 max-w-full bg-gray-300">
       <div className="flex justify-center items-center">
-        <span className="cursor-default">Hãng</span>
+        <span className="cursor-default font-semibold text-slate-700">Hãng</span>
       </div>
       <ul className="flex gap-4 w-full overflow-auto webkitScroll">
         {brandList && brandList?.map(item => (
