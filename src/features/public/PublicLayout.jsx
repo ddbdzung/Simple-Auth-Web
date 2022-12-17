@@ -25,7 +25,7 @@ export default function PublicLayout(_props) {
     if (statusCode) {
       setTimeout(() => {
         dispatch(clearStatusCode())
-      }, 300)
+      }, 1500)
     }
 
     if (message) {
@@ -36,7 +36,7 @@ export default function PublicLayout(_props) {
       } else {
         setTimeout(() => {
           dispatch(clearMessage())
-        }, 300)
+        }, 1500)
       }
     }
   })
