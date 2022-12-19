@@ -14,7 +14,7 @@ import {
   clearStatusCode,
   clearResetPasswordEntry,
 } from '../../authSlice'
-import { ERROR } from '../../../../constants'
+import { ERROR, SUCCESS } from '../../../../constants'
 import { useState, useEffect } from 'react'
 import Alert from '../../../../shared/Alert'
 

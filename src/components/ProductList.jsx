@@ -28,7 +28,7 @@ export default function ProductList(_props) {
     <>
       <Brand />
       <Filter />
-      <div className="grid grid-cols-2 border-0 border-slate-400 gap-2 tablet:grid-cols-3 laptop:grid-cols-4 mb-4">
+      <div className="grid grid-cols-2 border-0 border-slate-400 gap-2 tablet:grid-cols-4 laptop:grid-cols-5 mb-4">
         {products && products?.map((item, idx) => (
           <div key={idx} className="bg-gray-100 rounded-lg
             p-2 flex flex-col gap-4">

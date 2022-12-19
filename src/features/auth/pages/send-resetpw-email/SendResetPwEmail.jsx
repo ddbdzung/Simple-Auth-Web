@@ -14,7 +14,7 @@ import {
 } from '../../authSlice'
 import RadioBox from '../../../../shared/custom/RadioBox'
 import Alert from '../../../../shared/Alert'
-import { ERROR } from '../../../../constants'
+import { ERROR, SUCCESS } from '../../../../constants'
 import hideMail from '../../../../helpers/hideMail.mjs'
 
 /**

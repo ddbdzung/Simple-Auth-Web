@@ -15,7 +15,7 @@ import {
 import hideMail from '../../../../helpers/hideMail.mjs'
 import Alert from '../../../../shared/Alert'
 import TextInput from '../../../../shared/custom/TextInput'
-import { ERROR } from '../../../../constants'
+import { ERROR, SUCCESS } from '../../../../constants'
 
 
 /**
