@@ -45,7 +45,7 @@ const columns = [
     sortable: true,
   },
   {
-    name: 'Ngày tạo',
+    name: 'Thời gian tạo',
     selector: row => {
       const dateTime = DateTime.fromMillis(Date.parse(row.createdAt))
         .setLocale('vi')
