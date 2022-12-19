@@ -38,7 +38,7 @@ authAxios.interceptors.response.use(
 
       if ([403, 500, 400].includes(code)) return Promise.reject(error)
 
-      if (code === 401 && ['Expired token', 'Detected malicious token'].includes(message)) {
+      if (code === 401 && ['Expired token', 'Detected malicious token', 'Token not found', 'Invalid token'].includes(message)) {
         return Promise.reject(error)
       } else if (code === 401 && !originalConfig?.sent) {
         originalConfig.sent = true

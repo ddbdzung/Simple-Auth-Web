@@ -12,6 +12,41 @@ import { customAxios } from "../../helpers/customAxios";
 import formatCurrencyVND from "../../helpers/formatCurrencyVND";
 import { decreaseItemInCart, increaseItemInCart, removeItemInCart } from "./publicSlice";
 
+export const pricePerProduct = (price, amount, discount = 0) => {
+  return price * amount * (100 - discount) / 100
+}
+
+const totalAmount = (cartList, shipCost) => {
+  let list = (!Array.isArray(cartList)) ? [cartList] : cartList
+
+  const result = list.reduce((accumulator, currentItem) => {
+    const pricePerProd = pricePerProduct(currentItem?.price, currentItem?.amount, currentItem?.discount)
+    return accumulator + pricePerProd
+  }, 0)
+
+  return result + shipCost
+}
+
+const originalAmount = cartList => {
+  let list = (!Array.isArray(cartList)) ? [cartList] : cartList
+
+  return list.reduce((accumulator, currentItem) => {
+    return accumulator + pricePerProduct(currentItem?.price, currentItem?.amount)
+  }, 0)
+}
+
+const totalDiscount = cartList => {
+  let list = (!Array.isArray(cartList)) ? [cartList] : cartList
+
+  return list.reduce((accumulator, currentItem) => {
+    return accumulator + (currentItem?.price * currentItem?.amount * currentItem?.discount / 100)
+  }, 0)
+}
+
+const getOverviewProduct = item => {
+  return `RAM: ${item?.ram ?? ''} ${GIGABYTE} | ROM: ${item?.rom ?? ''} ${GIGABYTE} | Màu: ${item?.color} | Pin: ${item?.battery ?? ''} ${MILIAMPEHOUR}`
+}
+
 export default function Cart() {
   const shipCost = 30000
   const dispatch = useDispatch()
@@ -86,41 +121,6 @@ export default function Cart() {
     const { amount } = _.find(cart, i => i.id === item._id)
     return { ...item, amount }
   }), [idList])
-
-  const pricePerProduct = (price, amount, discount = 0) => {
-    return price * amount * (100 - discount) / 100
-  }
-
-  const totalAmount = (cartList, shipCost) => {
-    let list = (!Array.isArray(cartList)) ? [cartList] : cartList
-
-    const result = list.reduce((accumulator, currentItem) => {
-      const pricePerProd = pricePerProduct(currentItem?.price, currentItem?.amount, currentItem?.discount)
-      return accumulator + pricePerProd
-    }, 0)
-
-    return result + shipCost
-  }
-
-  const originalAmount = cartList => {
-    let list = (!Array.isArray(cartList)) ? [cartList] : cartList
-
-    return list.reduce((accumulator, currentItem) => {
-      return accumulator + pricePerProduct(currentItem?.price, currentItem?.amount)
-    }, 0)
-  }
-
-  const totalDiscount = cartList => {
-    let list = (!Array.isArray(cartList)) ? [cartList] : cartList
-
-    return list.reduce((accumulator, currentItem) => {
-      return accumulator + (currentItem?.price * currentItem?.amount * currentItem?.discount / 100)
-    }, 0)
-  }
-
-  const getOverviewProduct = item => {
-    return `RAM: ${item?.ram ?? ''} ${GIGABYTE} | ROM: ${item?.rom ?? ''} ${GIGABYTE} | Màu: ${item?.color} | Pin: ${item?.battery ?? ''} ${MILIAMPEHOUR}`
-  }
 
   useEffect(() => {
     let mounted = true

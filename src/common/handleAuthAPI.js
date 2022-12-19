@@ -21,7 +21,7 @@ const handleAuthAPI = (state, { code, message }) => {
 
   } else if ([403].includes(code)) {
     state.statusCode = code
-    state.message = 'There is some malicious action that affect your account. Please log out and re-authenticate again!'
+    state.message = 'FORBIDDEN! Maybe your account was banned or some malicious actions took place'
 
     return false
   } else if ([400].includes(code)) {

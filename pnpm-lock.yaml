@@ -40,6 +40,7 @@ specifiers:
   jwt-decode: ^3.1.2
   lodash: ^4.17.21
   lodash.throttle: ^4.1.1
+  luxon: ^3.1.1
   moment: ^2.29.4
   postcss: ^8.4.16
   postcss-scss: ^4.0.4
@@ -92,6 +93,7 @@ dependencies:
   jwt-decode: 3.1.2
   lodash: 4.17.21
   lodash.throttle: 4.1.1
+  luxon: 3.1.1
   moment: 2.29.4
   prop-types: 15.8.1
   react: 18.2.0
@@ -4374,6 +4376,11 @@ packages:
     dependencies:
       yallist: 4.0.0
     dev: true
+
+  /luxon/3.1.1:
+    resolution: {integrity: sha512-Ah6DloGmvseB/pX1cAmjbFvyU/pKuwQMQqz7d0yvuDlVYLTs2WeDHQMpC8tGjm1da+BriHROW/OEIT/KfYg6xw==}
+    engines: {node: '>=12'}
+    dev: false
 
   /lz-string/1.4.4:
     resolution: {integrity: sha512-0ckx7ZHRPqb0oUm8zNr+90mtf9DQB60H1wMCjBtfi62Kl3a7JbHob6gA2bC+xRvZoOL+1hzUK8jeuEIQE8svEQ==}

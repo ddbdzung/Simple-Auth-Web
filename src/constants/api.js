@@ -29,3 +29,10 @@ export const CATALOG = {
   UPDATE_CATALOG: '',
   DELETE_CATALOG: '',
 }
+
+export const TRANSACTION = {
+  BASE: '/checkout',
+  GET_TRANSACTIONS: '',
+  GET_TRANSACTION: '',
+  UPDATE_TRANSACTION: '',
+}

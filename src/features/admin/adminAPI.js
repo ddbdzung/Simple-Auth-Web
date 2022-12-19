@@ -16,6 +16,11 @@ export async function fetchGetCataloguesAsync(_payload) {
 
   return authAxios.get(api)
 }
+export async function fetchGetOrdersAsync(_payload) {
+  const api = `${API.TRANSACTION.BASE}/${API.ADMIN}/${API.TRANSACTION.GET_TRANSACTIONS}`
+
+  return authAxios.get(api)
+}
 
 export async function fetchCreateProductAsync(payload) {
   const api = `${API.PRODUCT.BASE}/${API.ADMIN}/${API.PRODUCT.CREATE_PRODUCT}`
@@ -43,8 +48,14 @@ export async function fetchUpdateBrandAsync(payload) {
   const api = `${API.BRAND.BASE}/${API.BRAND.UPDATE_BRAND}${payload.id}`
   return authAxios.patch(api, payload)
 }
+
 export async function fetchUpdateCatalogAsync(payload) {
   const api = `${API.CATALOG.BASE}/${API.CATALOG.UPDATE_CATALOG}${payload.id}`
+  return authAxios.patch(api, payload)
+}
+
+export async function fetchUpdateOrderAsync(payload) {
+  const api = `${API.TRANSACTION.BASE}/${API.ADMIN}/${API.TRANSACTION.UPDATE_TRANSACTION}${payload.id}`
   return authAxios.patch(api, payload)
 }
 

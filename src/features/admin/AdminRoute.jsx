@@ -12,12 +12,13 @@ import Dashboard from "./pages/Dashboard";
 import BrandDetail from "./pages/detail/BrandDetail";
 import CatalogDetail from "./pages/detail/CatalogDetail";
 import ProductDetail from "./pages/detail/ProductDetail";
-import Invoice from "./pages/Invoice";
 import Order from "./pages/Order";
 import Product from "./pages/Product";
 import BrandUpdate from "./pages/update/BrandUpdate";
 import CatalogUpdate from "./pages/update/CatalogUpdate";
 import ProductUpdate from "./pages/update/ProductUpdate";
+import OrderDetail from "./pages/detail/OrderDetail";
+import OrderUpdate from "./pages/update/OrderUpdate";
 
 export default function AdminRoute() {
   return (
@@ -73,14 +74,19 @@ export default function AdminRoute() {
             <CatalogUpdate />
           </PrivateRoute>
         } />
-        <Route path="invoice" element={
-          <PrivateRoute>
-            <Invoice />
-          </PrivateRoute>
-        } />
         <Route path="order" element={
           <PrivateRoute>
             <Order />
+          </PrivateRoute>
+        } />
+        <Route path="order/:id" element={
+          <PrivateRoute>
+            <OrderDetail />
+          </PrivateRoute>
+        } />
+        <Route path="order/:id/e" element={
+          <PrivateRoute>
+            <OrderUpdate />
           </PrivateRoute>
         } />
         <Route path="product" element={

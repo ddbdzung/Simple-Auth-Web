@@ -15,6 +15,8 @@ import {
   fetchUpdateBrandAsync,
   fetchUpdateProductAsync,
   fetchUpdateCatalogAsync,
+  fetchGetOrdersAsync,
+  fetchUpdateOrderAsync,
 } from './adminAPI'
 
 const initialState = {
@@ -22,6 +24,7 @@ const initialState = {
   message: '',
   isCreatedItem: false,
 
+  orders: loadState('adOrders')?.adOrders ?? [],
   products: loadState('adProducts')?.adProducts ?? [],
   brands: loadState('adBrands')?.adBrands ?? [],
   catalogues: loadState('adCatalogues')?.adCatalogues ?? [],
@@ -44,6 +47,7 @@ export const getProductsAsync = createAsyncThunk(
     }
   }
 )
+
 export const getBrandsAsync = createAsyncThunk(
   'auth/fetchGetBrandsAsync',
   async (payload) => {
@@ -67,6 +71,24 @@ export const getCataloguesAsync = createAsyncThunk(
   async (payload) => {
     try {
       const { data } = await fetchGetCataloguesAsync(payload)
+
+      return data
+    } catch (errorResponse) {
+      const { code, message } = errorResponse
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return { code, message }
+      }
+
+      return errorResponse.response.data
+    }
+  }
+)
+
+export const getOrdersAsync = createAsyncThunk(
+  'auth/fetchGetOrdersAsync',
+  async (payload) => {
+    try {
+      const { data } = await fetchGetOrdersAsync(payload)
 
       return data
     } catch (errorResponse) {
@@ -175,6 +197,24 @@ export const updateCatalogAsync = createAsyncThunk(
   async (payload) => {
     try {
       const { data } = await fetchUpdateCatalogAsync(payload)
+
+      return data
+    } catch (errorResponse) {
+      const { code, message } = errorResponse
+      if (errorResponse.code === 'ERR_NETWORK') {
+        return { code, message }
+      }
+
+      return errorResponse.response.data
+    }
+  }
+)
+
+export const updateOrderAsync = createAsyncThunk(
+  'auth/fetchUpdateOrderAsync',
+  async (payload) => {
+    try {
+      const { data } = await fetchUpdateOrderAsync(payload)
 
       return data
     } catch (errorResponse) {
@@ -324,6 +364,29 @@ export const adminSlice = createSlice({
         }
       })
 
+      .addCase(getOrdersAsync.pending, (state, action) => {
+      })
+      .addCase(getOrdersAsync.rejected, (state, action) => {
+      })
+      .addCase(getOrdersAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+
+          return
+        }
+
+        if (!handleAuthAPI(state, action.payload)) return
+
+        const { code, data } = action.payload
+
+        if ([200].includes(code)) {
+          state.orders = data
+          saveState('adOrders', data)
+
+          return
+        }
+      })
+
       .addCase(createProductAsync.pending, (state, action) => {
       })
       .addCase(createProductAsync.rejected, (state, action) => {
@@ -459,6 +522,28 @@ export const adminSlice = createSlice({
 
         if ([200].includes(code)) {
           state.message = message
+
+          return
+        }
+      })
+
+      .addCase(updateOrderAsync.pending, (state, action) => {
+      })
+      .addCase(updateOrderAsync.rejected, (state, action) => {
+      })
+      .addCase(updateOrderAsync.fulfilled, (state, action) => {
+        if (action?.payload?.code === 'ERR_NETWORK') {
+          state.message = action.payload.message
+
+          return
+        }
+
+        if (!handleAuthAPI(state, action.payload)) return
+
+        const { code, message } = action.payload
+
+        if ([200].includes(code)) {
+          state.message = 'Cập nhật thành công'
 
           return
         }

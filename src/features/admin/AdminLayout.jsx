@@ -41,7 +41,7 @@ function AdminLayout() {
     <div id="body_admin" className="font-inter antialiased bg-slate-100 text-slate-600 relative">
       {errorMessage && (
         <div className="absolute top-3 left-3 z-50 max-w-lg bg-transparent">
-          <Alert type={(errorMessage === 'OK') ? SUCCESS : ERROR} title={(errorMessage === 'OK') ? '' : 'error'} contents={errorMessage} id={uuidv4()} />
+          <Alert type={(errorMessage === 'OK' || errorMessage === 'Cập nhật thành công') ? SUCCESS : ERROR} title={(errorMessage === 'OK' || errorMessage === 'Cập nhật thành công') ? 'SUCCESS' : 'ERROR'} contents={errorMessage} id={uuidv4()} />
         </div>
       )}
 
