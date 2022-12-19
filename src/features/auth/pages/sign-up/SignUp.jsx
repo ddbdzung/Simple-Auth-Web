@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import TextInput from '../../../../shared/custom/TextInput'
 import { clearMessage, signUpAsync, clearResetPasswordEntry } from '../../authSlice'
 import Alert from '../../../../shared/Alert'
-import { ERROR } from '../../../../constants'
+import { ERROR, SUCCESS } from '../../../../constants'
 
 /**
  * Submit form with throttle wait 3s
