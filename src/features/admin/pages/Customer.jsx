@@ -1,172 +1,140 @@
-import { Image } from 'cloudinary-react'
-import { NavLink } from 'react-router-dom'
+import { useCallback, useEffect, useState } from 'react';
+import DataTable from 'react-data-table-component'
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, NavLink } from 'react-router-dom';
+import { DateTime } from 'luxon'
+
+import { loadState } from '../../../helpers/handleState.js';
+import Loading from '../../../shared/Loading/index.jsx';
+import { deleteUserAsync, getUserAsync } from '../adminSlice.js';
+import CRUD from '../partials/actions/CRUD.jsx';
+
+const columns = [
+  {
+    name: 'Họ tên',
+    selector: row => row?.username,
+    sortable: true,
+  },
+  {
+    name: 'Địa chỉ email',
+    selector: row => row?.email,
+    sortable: true,
+  },
+  {
+    name: 'Trạng thái',
+    selector: row => row?.status,
+    sortable: true,
+  },
+  {
+    name: 'Thời điểm tạo',
+    selector: row => DateTime.fromMillis(Date.parse(row?.createdAt))
+      .setLocale('vi')
+      .toFormat('dd/LL/yyyy-hh:mm:ss'),
+    sortable: true,
+  },
+  {
+    name: 'Cập nhật lúc',
+    selector: row => DateTime.fromMillis(Date.parse(row.updatedAt))
+      .setLocale('vi')
+      .toFormat('dd/LL/yyyy-hh:mm:ss'),
+    sortable: true,
+  },
+];
+
+const paginationComponentOptions = {
+  rowsPerPageText: 'Số bản ghi trong 1 page',
+  rangeSeparatorText: 'đến',
+  selectAllRowsItem: true,
+  selectAllRowsItemText: 'Todos',
+};
 
 export default function Customer() {
+  const { users } = useSelector(store => store.admin)
+  const [selectedUsers, setSelectedUsers] = useState([])
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    dispatch(getUserAsync({}))
+
+  }, [])
+
+  const handleViewDetail = () => {
+    if (selectedUsers.length === 1) {
+      const { _id: id } = selectedUsers[0]
+      navigate(`/admin/customer/${id}`)
+    }
+  }
+  const handleCreate = () => {
+    navigate(`/admin/customer/create`)
+  }
+  const handleUpdate = () => {
+    // if (selectedUsers.length === 1) {
+    //   const { _id: id } = selectedUsers[0]
+    //   navigate(`/admin/customer/${id}/e`)
+    // }
+    return
+  }
+  const handleDelete = useCallback(() => {
+    if (selectedUsers.length === 1) {
+      const { _id: id } = selectedUsers[0]
+      const willDelete = window.confirm('Bạn có chắc muốn xóa chứ?')
+      if (!willDelete) return
+
+      const users = loadState('adUsers').adUsers
+      if (!users) {
+        return
+      }
+
+      if (users.findIndex(item => item._id === id) === -1) {
+        return
+      }
+
+      dispatch(deleteUserAsync({ id }))
+    }
+  })
+
+  const handleChange = useCallback(({ selectedRows }) => {
+    setSelectedUsers(selectedRows)
+  })
+
   return (
-    <>
-      <link href="https://cdn.jsdelivr.net/npm/daisyui@2.42.1/dist/full.css" rel="stylesheet" type="text/css" />
-      <div className="tablet:ml-60" data-theme="corporate">
-        {/* Navigation */}
-        <div className="p-2">
-          <span className="text-black font-medium text-sm">
-            <NavLink to="/admin">Trang chủ</NavLink>
-            {' / '}
-            <NavLink to="/admin/customer">Khách hàng</NavLink>
-          </span>
-        </div>
-
-        <div className="overflow-x-auto w-full">
-          <table className="table w-full">
-            {/* <!-- head --> */}
-            <thead>
-              <tr>
-                <th>
-                  <label>
-                    <input type="checkbox" className="checkbox" />
-                  </label>
-                </th>
-                <th>Họ và tên</th>
-                <th>Địa chỉ email</th>
-                <th>Số điện thoại</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* <!-- row 1 --> */}
-              <tr>
-                <th>
-                  <label>
-                    <input type="checkbox" className="checkbox" />
-                  </label>
-                </th>
-                <td>
-                  <div className="flex items-center space-x-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle w-12 h-12">
-                        <Image src={"https://res.cloudinary.com/dbbifu1w6/image/upload/v1666838881/samples/people/smiling-man.jpg"} alt="Avatar Tailwind CSS Component" />
-                      </div>
-                    </div>
-                    <div>
-                      <div className="font-bold">Hart Hagerty</div>
-                      <div className="text-sm opacity-50">United States</div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  Zemlak, Daniel and Leannon
-                  <br />
-                  <span className="badge badge-ghost badge-sm">Desktop Support Technician</span>
-                </td>
-                <td>Purple</td>
-                <th>
-                  <button className="btn btn-ghost btn-xs">details</button>
-                </th>
-              </tr>
-              {/* <!-- row 2 --> */}
-              <tr>
-                <th>
-                  <label>
-                    <input type="checkbox" className="checkbox" />
-                  </label>
-                </th>
-                <td>
-                  <div className="flex items-center space-x-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle w-12 h-12">
-                        <Image src={"https://res.cloudinary.com/dbbifu1w6/image/upload/v1666838881/samples/people/smiling-man.jpg"} alt="Avatar Tailwind CSS Component" />
-                      </div>
-                    </div>
-                    <div>
-                      <div className="font-bold">Brice Swyre</div>
-                      <div className="text-sm opacity-50">China</div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  Carroll Group
-                  <br />
-                  <span className="badge badge-ghost badge-sm">Tax Accountant</span>
-                </td>
-                <td>Red</td>
-                <th>
-                  <button className="btn btn-ghost btn-xs">details</button>
-                </th>
-              </tr>
-              {/* <!-- row 3 --> */}
-              <tr>
-                <th>
-                  <label>
-                    <input type="checkbox" className="checkbox" />
-                  </label>
-                </th>
-                <td>
-                  <div className="flex items-center space-x-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle w-12 h-12">
-                        <Image src={"https://res.cloudinary.com/dbbifu1w6/image/upload/v1666838881/samples/people/smiling-man.jpg"} alt="Avatar Tailwind CSS Component" />
-                      </div>
-                    </div>
-                    <div>
-                      <div className="font-bold">Marjy Ferencz</div>
-                      <div className="text-sm opacity-50">Russia</div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  Rowe-Schoen
-                  <br />
-                  <span className="badge badge-ghost badge-sm">Office Assistant I</span>
-                </td>
-                <td>Crimson</td>
-                <th>
-                  <button className="btn btn-ghost btn-xs">details</button>
-                </th>
-              </tr>
-              {/* <!-- row 4 --> */}
-              <tr>
-                <th>
-                  <label>
-                    <input type="checkbox" className="checkbox" />
-                  </label>
-                </th>
-                <td>
-                  <div className="flex items-center space-x-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle w-12 h-12">
-                        <Image src={"https://res.cloudinary.com/dbbifu1w6/image/upload/v1666838881/samples/people/smiling-man.jpg"} alt="Avatar Tailwind CSS Component" />
-                      </div>
-                    </div>
-                    <div>
-                      <div className="font-bold">Yancy Tear</div>
-                      <div className="text-sm opacity-50">Brazil</div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  Wyman-Ledner
-                  <br />
-                  <span className="badge badge-ghost badge-sm">Community Outreach Specialist</span>
-                </td>
-                <td>Indigo</td>
-                <th>
-                  <button className="btn btn-ghost btn-xs">details</button>
-                </th>
-              </tr>
-            </tbody>
-            {/* <!-- foot --> */}
-            <tfoot>
-              <tr>
-                <th></th>
-                <th>Name</th>
-                <th>Job</th>
-                <th>Favorite Color</th>
-                <th></th>
-              </tr>
-            </tfoot>
-
-          </table>
-        </div>
+    <div className="tablet:ml-60">
+      {/* Navigation */}
+      <div className="p-2">
+        <span classNa me="text-black font-medium text-sm">
+          <NavLink to="/admin">Trang chủ</NavLink>
+          {' / '}
+          <NavLink to="/admin/customer">Khách hàng</NavLink>
+        </span>
       </div>
-    </>
+      <h1 className="text-center text-lg font-bold pb-2">Quản lý khách hàng</h1>
+      {(users.length <= 0)
+        ?
+        <Loading />
+        :
+        <DataTable
+          tilte={'Quản lý danh mục'}
+
+          columns={columns}
+          data={users}
+          selectableRows
+          selectableRowsSingle
+          onSelectedRowsChange={handleChange}
+
+          pagination
+          paginationComponentOptions={paginationComponentOptions}
+
+        />
+      }
+      {/* CRUD Buttons */}
+      <CRUD containerStyle="my-4 justify-end"
+        handleViewDetail={handleViewDetail}
+        handleCreate={handleCreate}
+        handleUpdate={handleUpdate}
+        handleDelete={handleDelete}
+      />
+    </div>
   )
 }

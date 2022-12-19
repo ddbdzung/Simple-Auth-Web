@@ -19,6 +19,8 @@ import CatalogUpdate from "./pages/update/CatalogUpdate";
 import ProductUpdate from "./pages/update/ProductUpdate";
 import OrderDetail from "./pages/detail/OrderDetail";
 import OrderUpdate from "./pages/update/OrderUpdate";
+import CustomerDetail from "./pages/detail/CustomerDetail";
+import CustomerCreation from "./pages/creation/CustomerCreation";
 
 export default function AdminRoute() {
   return (
@@ -34,6 +36,21 @@ export default function AdminRoute() {
             <Customer />
           </PrivateRoute>
         } />
+        <Route path="customer/:id" element={
+          <PrivateRoute>
+            <CustomerDetail />
+          </PrivateRoute>
+        } />
+        <Route path="customer/create" element={
+          <PrivateRoute>
+            <CustomerCreation />
+          </PrivateRoute>
+        } />
+        {/* <Route path="customer/:id/e" element={
+          <PrivateRoute>
+            <BrandUpdate />
+          </PrivateRoute>
+        } /> */}
         <Route path="brand" element={
           <PrivateRoute>
             <Brand />

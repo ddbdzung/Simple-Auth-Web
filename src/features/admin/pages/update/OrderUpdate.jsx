@@ -57,7 +57,6 @@ export default function OrderUpdate() {
         initialValues={initialValues}
         validationSchema={Yup.object({
           status: Yup.mixed()
-            .required('Required')
             .oneOf(['0', '1', '-1']),
         })}
         onSubmit={(values, actions) => {

@@ -36,3 +36,12 @@ export const TRANSACTION = {
   GET_TRANSACTION: '',
   UPDATE_TRANSACTION: '',
 }
+
+export const USER = {
+  BASE: '/user',
+  GET_CLIENTS: '',
+  GET_CLIENT: '',
+  CREATE_CLIENT: '',
+  UPDATE_CLIENT: '',
+  DELETE_CLIENT: '',
+}

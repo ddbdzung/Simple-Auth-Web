@@ -26,7 +26,7 @@ const handleAuthAPI = (state, { code, message }) => {
     return false
   } else if ([400].includes(code)) {
     state.statusCode = code
-    state.message = 'Your request is bad. Please try again.'
+    state.message = message ?? 'Your request is bad. Please try again.'
 
     return false
   } else return true
